@@ -1,0 +1,24 @@
+SchemaValidator.ts
+
+import Ajv from 'ajv';
+
+export class SchemaValidator {
+
+  static validateSchema(schema: object, responseBody: object) {
+
+    const ajv = new Ajv();
+
+    const validate = ajv.compile(schema);
+
+    const isValid = validate(responseBody);
+
+    if (!isValid) {
+      console.log('Schema Validation Errors:', validate.errors);
+    }
+
+    return {
+      isValid,
+      errors: validate.errors
+    };
+  }
+}

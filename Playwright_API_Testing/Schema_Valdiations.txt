@@ -1,0 +1,4 @@
+Schema validation means validating the structure of the API response.
+I verify whether mandatory fields are present and whether each field has the expected data type.
+I also validate nested objects, arrays, formats, and additional properties when required.
+This helps detect contract-breaking API changes even when the HTTP status is 200.

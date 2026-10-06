@@ -1,0 +1,22 @@
+import { test, expect } from '@playwright/test';
+
+test('Mock user API', async ({ page }) => {
+
+  await page.route('**/api/users/101', async route => {
+
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        id: 101,
+        name: 'Suraj',
+        status: 'active'
+      })
+    });
+
+  });
+
+  await page.goto('https://example.com');
+
+  await expect(page.getByText('Suraj')).toBeVisible();
+});

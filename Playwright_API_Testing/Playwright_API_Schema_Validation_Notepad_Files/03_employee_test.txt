@@ -1,0 +1,34 @@
+employee.spec.ts
+
+import { test, expect } from '@playwright/test';
+
+import employeeSchema from '../src/schemas/employee.schema.json';
+
+import { SchemaValidator } from '../src/utils/SchemaValidator';
+
+test('Validate employee API schema', async ({ request }) => {
+
+  // Step 1: Send API request
+  const response = await request.get(
+    'https://api.example.com/employees/101'
+  );
+
+  // Step 2: Validate status code
+  expect(response.status()).toBe(200);
+
+  // Step 3: Convert response into JSON
+  const body = await response.json();
+
+  // Step 4: Validate response against schema
+  const result = SchemaValidator.validateSchema(
+    employeeSchema,
+    body
+  );
+
+  // Step 5: Fail the test if schema validation fails
+  expect(
+    result.isValid,
+    `Schema Validation Failed: ${JSON.stringify(result.errors)}`
+  ).toBeTruthy();
+
+});

@@ -1,0 +1,220 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Response Body Validation - Positive and Negative', () => {
+
+  test('Validate complete response body', async ({ request }) => {
+
+    const response = await request.get('https://api.example.com/employees/101');
+
+    // ==============================
+    // 1. Validate HTTP Status
+    // ==============================
+    expect(response.status()).toBe(200);
+    expect(response.ok()).toBeTruthy();
+
+
+    // ==============================
+    // 2. Convert Response to JSON
+    // ==============================
+    const body = await response.json();
+
+    console.log('Response Body:', body);
+
+
+    // =====================================================
+    // POSITIVE RESPONSE BODY VALIDATIONS
+    // =====================================================
+
+
+    // ==============================
+    // 3. Validate exact field values
+    // ==============================
+    expect(body.id).toBe(101);
+    expect(body.name).toBe('Suraj');
+    expect(body.status).toBe('active');
+    expect(body.city).toBe('Pune');
+
+
+    // ==============================
+    // 4. Validate fields are defined
+    // ==============================
+    expect(body.id).toBeDefined();
+    expect(body.name).toBeDefined();
+    expect(body.status).toBeDefined();
+    expect(body.city).toBeDefined();
+
+
+    // ==============================
+    // 5. Validate fields are not null
+    // ==============================
+    expect(body.id).not.toBeNull();
+    expect(body.name).not.toBeNull();
+    expect(body.status).not.toBeNull();
+    expect(body.city).not.toBeNull();
+
+
+    // ==============================
+    // 6. Validate Data Types
+    // ==============================
+    expect(typeof body.id).toBe('number');
+    expect(typeof body.name).toBe('string');
+    expect(typeof body.status).toBe('string');
+    expect(typeof body.city).toBe('string');
+
+
+    // ==============================
+    // 7. Validate complete object
+    // ==============================
+    expect(body).toMatchObject({
+      id: 101,
+      name: 'Suraj',
+      status: 'active',
+      city: 'Pune'
+    });
+
+
+    // ==============================
+    // 8. Validate object equality
+    // Use only when response contains
+    // exactly these fields
+    // ==============================
+    /*
+    expect(body).toEqual({
+      id: 101,
+      name: 'Suraj',
+      status: 'active',
+      city: 'Pune'
+    });
+    */
+
+
+    // ==============================
+    // 9. Validate string contains text
+    // ==============================
+    expect(body.name).toContain('Sur');
+    expect(body.city).toContain('Pun');
+
+
+    // ==============================
+    // 10. Validate using Regular Expression
+    // ==============================
+    expect(body.name).toMatch(/^Suraj$/);
+    expect(body.city).toMatch(/Pune/i);
+
+
+    // ==============================
+    // 11. Validate allowed values
+    // ==============================
+    expect(['active', 'inactive']).toContain(body.status);
+
+
+    // ==============================
+    // 12. Validate numeric condition
+    // ==============================
+    expect(body.id).toBeGreaterThan(0);
+    expect(body.id).toBeGreaterThanOrEqual(101);
+    expect(body.id).toBeLessThan(1000);
+
+
+    // ==============================
+    // 13. Validate String Length
+    // ==============================
+    expect(body.name.length).toBeGreaterThan(0);
+    expect(body.city.length).toBeGreaterThan(0);
+
+
+    // ==============================
+    // 14. Validate property exists
+    // ==============================
+    expect(body).toHaveProperty('id');
+    expect(body).toHaveProperty('name');
+    expect(body).toHaveProperty('status');
+    expect(body).toHaveProperty('city');
+
+
+    // ==============================
+    // 15. Validate property with value
+    // ==============================
+    expect(body).toHaveProperty('id', 101);
+    expect(body).toHaveProperty('name', 'Suraj');
+    expect(body).toHaveProperty('status', 'active');
+
+
+    // =====================================================
+    // NEGATIVE VALIDATIONS
+    // =====================================================
+
+
+    // ==============================
+    // 16. Value should NOT be wrong ID
+    // ==============================
+    expect(body.id).not.toBe(999);
+
+
+    // ==============================
+    // 17. Name should NOT be incorrect
+    // ==============================
+    expect(body.name).not.toBe('Rahul');
+
+
+    // ==============================
+    // 18. Status should NOT be inactive
+    // ==============================
+    expect(body.status).not.toBe('inactive');
+
+
+    // ==============================
+    // 19. City should NOT be Mumbai
+    // ==============================
+    expect(body.city).not.toBe('Mumbai');
+
+
+    // ==============================
+    // 20. Field should NOT be undefined
+    // ==============================
+    expect(body.name).not.toBeUndefined();
+
+
+    // ==============================
+    // 21. Field should NOT be null
+    // ==============================
+    expect(body.name).not.toBeNull();
+
+
+    // ==============================
+    // 22. String should NOT be empty
+    // ==============================
+    expect(body.name).not.toBe('');
+    expect(body.city).not.toBe('');
+
+
+    // ==============================
+    // 23. Object should NOT contain wrong values
+    // ==============================
+    expect(body).not.toMatchObject({
+      id: 999,
+      name: 'Rahul'
+    });
+
+
+    // ==============================
+    // 24. Validate unwanted property
+    // does NOT exist
+    // ==============================
+    expect(body).not.toHaveProperty('password');
+
+
+    // ==============================
+    // 25. Validate status is NOT invalid
+    // ==============================
+    expect(body.status).not.toBe('deleted');
+
+
+    // ==============================
+    // 26. Validate name does NOT contain text
+    // ==============================
+    expect(body.name).not.toContain('TestUser');
+
+  });
+
+});

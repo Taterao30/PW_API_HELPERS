@@ -1,0 +1,1726 @@
+TOP 100 FULLY TYPESCRIPT STRING AND ARRAY PROGRAMS FOR SDET INTERVIEWS
+For 7 Years Experience Candidates
+===============================================================
+
+PART 1 - STRING PROGRAMS (1-50)
+===============================================================
+
+1. Reverse a String
+-------------------
+const str: string = "Suraj";
+const reversed: string = str.split("").reverse().join("");
+console.log(reversed);
+
+Output:
+jaruS
+
+
+2. Reverse String Without reverse()
+-----------------------------------
+const str: string = "Suraj";
+let result: string = "";
+
+for (let i: number = str.length - 1; i >= 0; i--) {
+    result += str[i];
+}
+
+console.log(result);
+
+Output:
+jaruS
+
+
+3. Check Palindrome
+-------------------
+const str: string = "madam";
+const reversed: string = str.split("").reverse().join("");
+const isPalindrome: boolean = str === reversed;
+console.log(isPalindrome);
+
+Output:
+true
+
+
+4. Count Characters
+-------------------
+const str: string = "playwright";
+const length: number = str.length;
+console.log(length);
+
+Output:
+10
+
+
+5. Count Vowels
+---------------
+const str: string = "automation";
+let count: number = 0;
+
+for (const char of str.toLowerCase()) {
+    if ("aeiou".includes(char)) {
+        count++;
+    }
+}
+
+console.log(count);
+
+Output:
+6
+
+
+6. Count Consonants
+-------------------
+const str: string = "automation";
+let count: number = 0;
+
+for (const char of str.toLowerCase()) {
+    if (/[a-z]/.test(char) && !"aeiou".includes(char)) {
+        count++;
+    }
+}
+
+console.log(count);
+
+Output:
+4
+
+
+7. Count Vowels and Consonants
+------------------------------
+const str: string = "Playwright";
+let vowels: number = 0;
+let consonants: number = 0;
+
+for (const char of str.toLowerCase()) {
+    if (/[a-z]/.test(char)) {
+        if ("aeiou".includes(char)) {
+            vowels++;
+        } else {
+            consonants++;
+        }
+    }
+}
+
+console.log(vowels, consonants);
+
+Output:
+2 8
+
+
+8. Character Frequency
+----------------------
+const str: string = "banana";
+const frequency: Map<string, number> = new Map<string, number>();
+
+for (const char of str) {
+    frequency.set(char, (frequency.get(char) ?? 0) + 1);
+}
+
+console.log(frequency);
+
+Output:
+b => 1
+a => 3
+n => 2
+
+
+9. Find Duplicate Characters
+----------------------------
+const str: string = "programming";
+const frequency: Map<string, number> = new Map<string, number>();
+
+for (const char of str) {
+    frequency.set(char, (frequency.get(char) ?? 0) + 1);
+}
+
+for (const [char, count] of frequency) {
+    if (count > 1) {
+        console.log(char);
+    }
+}
+
+Output:
+r
+g
+m
+
+
+10. Remove Duplicate Characters
+-------------------------------
+const str: string = "programming";
+const uniqueCharacters: Set<string> = new Set<string>(str);
+const result: string = [...uniqueCharacters].join("");
+console.log(result);
+
+Output:
+progamin
+
+
+11. First Non-Repeating Character
+---------------------------------
+const str: string = "swiss";
+const frequency: Map<string, number> = new Map<string, number>();
+
+for (const char of str) {
+    frequency.set(char, (frequency.get(char) ?? 0) + 1);
+}
+
+let result: string | undefined;
+
+for (const char of str) {
+    if (frequency.get(char) === 1) {
+        result = char;
+        break;
+    }
+}
+
+console.log(result);
+
+Output:
+w
+
+
+12. First Repeating Character
+-----------------------------
+const str: string = "programming";
+const seen: Set<string> = new Set<string>();
+let result: string | undefined;
+
+for (const char of str) {
+    if (seen.has(char)) {
+        result = char;
+        break;
+    }
+    seen.add(char);
+}
+
+console.log(result);
+
+Output:
+r
+
+
+13. Most Frequent Character
+---------------------------
+const str: string = "banana";
+const frequency: Map<string, number> = new Map<string, number>();
+
+for (const char of str) {
+    frequency.set(char, (frequency.get(char) ?? 0) + 1);
+}
+
+let maxChar: string = "";
+let maxCount: number = 0;
+
+for (const [char, count] of frequency) {
+    if (count > maxCount) {
+        maxChar = char;
+        maxCount = count;
+    }
+}
+
+console.log(maxChar, maxCount);
+
+Output:
+a 3
+
+
+14. Check Anagram Using sort()
+------------------------------
+const str1: string = "listen";
+const str2: string = "silent";
+
+const normalize = (value: string): string =>
+    value.split("").sort().join("");
+
+const isAnagram: boolean = normalize(str1) === normalize(str2);
+console.log(isAnagram);
+
+Output:
+true
+
+
+15. Check Anagram Without sort()
+--------------------------------
+function isAnagram(a: string, b: string): boolean {
+    if (a.length !== b.length) {
+        return false;
+    }
+
+    const frequency: Map<string, number> = new Map<string, number>();
+
+    for (const char of a) {
+        frequency.set(char, (frequency.get(char) ?? 0) + 1);
+    }
+
+    for (const char of b) {
+        const count: number | undefined = frequency.get(char);
+
+        if (count === undefined || count === 0) {
+            return false;
+        }
+
+        frequency.set(char, count - 1);
+    }
+
+    return true;
+}
+
+console.log(isAnagram("listen", "silent"));
+
+Output:
+true
+
+
+16. Capitalize First Letter
+---------------------------
+const str: string = "suraj";
+const result: string = str.charAt(0).toUpperCase() + str.slice(1);
+console.log(result);
+
+Output:
+Suraj
+
+
+17. Capitalize Every Word
+-------------------------
+const str: string = "welcome to playwright automation";
+
+const result: string = str
+    .split(" ")
+    .map((word: string): string =>
+        word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join(" ");
+
+console.log(result);
+
+Output:
+Welcome To Playwright Automation
+
+
+18. Reverse Every Word
+----------------------
+const str: string = "hello world";
+
+const result: string = str
+    .split(" ")
+    .map((word: string): string =>
+        word.split("").reverse().join("")
+    )
+    .join(" ");
+
+console.log(result);
+
+Output:
+olleh dlrow
+
+
+19. Reverse Word Order
+----------------------
+const str: string = "I love Playwright";
+const result: string = str.split(" ").reverse().join(" ");
+console.log(result);
+
+Output:
+Playwright love I
+
+
+20. Count Words
+---------------
+const str: string = "I love Playwright automation";
+const words: string[] = str.trim().split(/\s+/);
+const count: number = words.length;
+console.log(count);
+
+Output:
+4
+
+
+21. Find Longest Word
+---------------------
+const str: string = "I love Playwright automation";
+const words: string[] = str.split(" ");
+let longest: string = "";
+
+for (const word of words) {
+    if (word.length > longest.length) {
+        longest = word;
+    }
+}
+
+console.log(longest);
+
+Output:
+automation
+
+
+22. Find Shortest Word
+----------------------
+const str: string = "I love Playwright automation";
+const words: string[] = str.split(" ");
+let shortest: string = words[0];
+
+for (const word of words) {
+    if (word.length < shortest.length) {
+        shortest = word;
+    }
+}
+
+console.log(shortest);
+
+Output:
+I
+
+
+23. Remove Spaces
+-----------------
+const str: string = "hello world playwright";
+const result: string = str.replace(/\s/g, "");
+console.log(result);
+
+Output:
+helloworldplaywright
+
+
+24. Remove Special Characters
+-----------------------------
+const str: string = "Suraj@123#Test!";
+const result: string = str.replace(/[^a-zA-Z0-9]/g, "");
+console.log(result);
+
+Output:
+Suraj123Test
+
+
+25. Extract Numbers From String
+-------------------------------
+const str: string = "Employee123Salary50000";
+const numbers: RegExpMatchArray | null = str.match(/\d+/g);
+console.log(numbers);
+
+Output:
+["123", "50000"]
+
+
+26. Extract Only Letters
+------------------------
+const str: string = "Suraj123@Playwright";
+const result: string = str.replace(/[^a-zA-Z]/g, "");
+console.log(result);
+
+Output:
+SurajPlaywright
+
+
+27. Count Uppercase and Lowercase
+---------------------------------
+const str: string = "SurajTEST";
+let upper: number = 0;
+let lower: number = 0;
+
+for (const char of str) {
+    if (char >= "A" && char <= "Z") {
+        upper++;
+    } else if (char >= "a" && char <= "z") {
+        lower++;
+    }
+}
+
+console.log(upper, lower);
+
+Output:
+5 4
+
+
+28. Swap Uppercase and Lowercase
+--------------------------------
+const str: string = "SuRaJ";
+let result: string = "";
+
+for (const char of str) {
+    result += char === char.toUpperCase()
+        ? char.toLowerCase()
+        : char.toUpperCase();
+}
+
+console.log(result);
+
+Output:
+sUrAj
+
+
+29. Check Only Digits
+---------------------
+const str: string = "12345";
+const result: boolean = /^\d+$/.test(str);
+console.log(result);
+
+Output:
+true
+
+
+30. Check Only Alphabets
+------------------------
+const str: string = "Playwright";
+const result: boolean = /^[a-zA-Z]+$/.test(str);
+console.log(result);
+
+Output:
+true
+
+
+31. Replace Character
+---------------------
+const str: string = "Java";
+const result: string = str.replace(/a/g, "o");
+console.log(result);
+
+Output:
+Jovo
+
+
+32. Count Specific Character
+----------------------------
+const str: string = "automation";
+const target: string = "a";
+let count: number = 0;
+
+for (const char of str) {
+    if (char === target) {
+        count++;
+    }
+}
+
+console.log(count);
+
+Output:
+2
+
+
+33. Remove Specific Character
+-----------------------------
+const str: string = "banana";
+
+const result: string = str
+    .split("")
+    .filter((char: string): boolean => char !== "a")
+    .join("");
+
+console.log(result);
+
+Output:
+bnn
+
+
+34. Check Substring
+-------------------
+const str: string = "Playwright automation testing";
+const result: boolean = str.includes("automation");
+console.log(result);
+
+Output:
+true
+
+
+35. Count Word Occurrences
+--------------------------
+const str: string = "test automation test api test";
+const target: string = "test";
+
+const count: number = str
+    .split(" ")
+    .filter((word: string): boolean => word === target)
+    .length;
+
+console.log(count);
+
+Output:
+3
+
+
+36. Remove Duplicate Words
+--------------------------
+const str: string = "API Playwright API Selenium Playwright";
+const words: string[] = str.split(" ");
+const uniqueWords: Set<string> = new Set<string>(words);
+const result: string = [...uniqueWords].join(" ");
+console.log(result);
+
+Output:
+API Playwright Selenium
+
+
+37. Find Duplicate Words
+------------------------
+const str: string = "api test api automation test";
+const words: string[] = str.split(" ");
+const frequency: Map<string, number> = new Map<string, number>();
+
+for (const word of words) {
+    frequency.set(word, (frequency.get(word) ?? 0) + 1);
+}
+
+for (const [word, count] of frequency) {
+    if (count > 1) {
+        console.log(word);
+    }
+}
+
+Output:
+api
+test
+
+
+38. Word Frequency
+------------------
+const str: string = "api test api playwright test api";
+const frequency: Map<string, number> = new Map<string, number>();
+
+for (const word of str.split(" ")) {
+    frequency.set(word, (frequency.get(word) ?? 0) + 1);
+}
+
+console.log(frequency);
+
+Output:
+api => 3
+test => 2
+playwright => 1
+
+
+39. Longest Substring Without Repeating Characters
+--------------------------------------------------
+function longestUnique(str: string): number {
+    const seen: Set<string> = new Set<string>();
+    let left: number = 0;
+    let maxLength: number = 0;
+
+    for (let right: number = 0; right < str.length; right++) {
+        while (seen.has(str[right])) {
+            seen.delete(str[left]);
+            left++;
+        }
+
+        seen.add(str[right]);
+        maxLength = Math.max(maxLength, right - left + 1);
+    }
+
+    return maxLength;
+}
+
+console.log(longestUnique("abcabcbb"));
+
+Output:
+3
+
+
+40. Check String Rotation
+-------------------------
+const str1: string = "ABCD";
+const str2: string = "CDAB";
+const result: boolean =
+    str1.length === str2.length &&
+    (str1 + str1).includes(str2);
+
+console.log(result);
+
+Output:
+true
+
+
+41. Rotate String Left
+----------------------
+const str: string = "abcdef";
+const k: number = 2;
+const result: string = str.slice(k) + str.slice(0, k);
+console.log(result);
+
+Output:
+cdefab
+
+
+42. Rotate String Right
+-----------------------
+const str: string = "abcdef";
+const k: number = 2;
+const result: string = str.slice(-k) + str.slice(0, -k);
+console.log(result);
+
+Output:
+efabcd
+
+
+43. Find Palindromic Words
+--------------------------
+const str: string = "madam test level api radar";
+const words: string[] = str.split(" ");
+
+const result: string[] = words.filter((word: string): boolean => {
+    const reversed: string = word.split("").reverse().join("");
+    return word === reversed;
+});
+
+console.log(result);
+
+Output:
+["madam", "level", "radar"]
+
+
+44. String Compression
+----------------------
+const str: string = "aaabbcccc";
+let result: string = "";
+let count: number = 1;
+
+for (let i: number = 0; i < str.length; i++) {
+    if (str[i] === str[i + 1]) {
+        count++;
+    } else {
+        result += str[i] + count;
+        count = 1;
+    }
+}
+
+console.log(result);
+
+Output:
+a3b2c4
+
+
+45. Common Characters Between Two Strings
+-----------------------------------------
+const str1: string = "apple";
+const str2: string = "plane";
+
+const set2: Set<string> = new Set<string>(str2);
+const unique1: Set<string> = new Set<string>(str1);
+
+const common: string[] = [...unique1]
+    .filter((char: string): boolean => set2.has(char));
+
+console.log(common);
+
+Output:
+["a", "p", "l", "e"]
+
+
+46. Find Missing Character in Sequence
+--------------------------------------
+const str: string = "abcdf";
+let missing: string = "";
+
+for (let i: number = 0; i < str.length - 1; i++) {
+    const currentCode: number = str.charCodeAt(i);
+    const nextCode: number = str.charCodeAt(i + 1);
+
+    if (nextCode - currentCode > 1) {
+        missing = String.fromCharCode(currentCode + 1);
+        break;
+    }
+}
+
+console.log(missing);
+
+Output:
+e
+
+
+47. Sort Characters Alphabetically
+----------------------------------
+const str: string = "dcba";
+const chars: string[] = str.split("");
+const result: string = chars.sort().join("");
+console.log(result);
+
+Output:
+abcd
+
+
+48. Largest Character Lexicographically
+---------------------------------------
+const str: string = "automation";
+const chars: string[] = [...str].sort();
+const result: string | undefined = chars.at(-1);
+console.log(result);
+
+Output:
+u
+
+
+49. Group Anagrams
+------------------
+const words: string[] = ["eat", "tea", "tan", "ate", "nat", "bat"];
+const groups: Map<string, string[]> = new Map<string, string[]>();
+
+for (const word of words) {
+    const key: string = word.split("").sort().join("");
+    const existing: string[] = groups.get(key) ?? [];
+    existing.push(word);
+    groups.set(key, existing);
+}
+
+const result: string[][] = [...groups.values()];
+console.log(result);
+
+Output:
+[
+  ["eat", "tea", "ate"],
+  ["tan", "nat"],
+  ["bat"]
+]
+
+
+50. Longest Common Prefix
+-------------------------
+const words: string[] = ["flower", "flow", "flight"];
+let prefix: string = words[0];
+
+for (let i: number = 1; i < words.length; i++) {
+    while (!words[i].startsWith(prefix)) {
+        prefix = prefix.slice(0, -1);
+    }
+}
+
+console.log(prefix);
+
+Output:
+fl
+
+
+===============================================================
+PART 2 - ARRAY PROGRAMS (51-100)
+===============================================================
+
+51. Find Maximum Number
+-----------------------
+const arr: number[] = [10, 50, 20, 90, 30];
+const max: number = Math.max(...arr);
+console.log(max);
+
+Output:
+90
+
+
+52. Find Minimum Number
+-----------------------
+const arr: number[] = [10, 50, 20, 90, 30];
+const min: number = Math.min(...arr);
+console.log(min);
+
+Output:
+10
+
+
+53. Find Maximum Without Math.max()
+-----------------------------------
+const arr: number[] = [10, 50, 20, 90];
+let max: number = arr[0];
+
+for (const num of arr) {
+    if (num > max) {
+        max = num;
+    }
+}
+
+console.log(max);
+
+Output:
+90
+
+
+54. Find Second Largest Number
+------------------------------
+const arr: number[] = [10, 50, 20, 90, 80];
+const unique: number[] = [...new Set<number>(arr)];
+unique.sort((a: number, b: number): number => b - a);
+
+const secondLargest: number = unique[1];
+console.log(secondLargest);
+
+Output:
+80
+
+
+55. Second Largest Without Sorting
+----------------------------------
+const arr: number[] = [10, 50, 20, 90, 80];
+
+let largest: number = -Infinity;
+let secondLargest: number = -Infinity;
+
+for (const num of arr) {
+    if (num > largest) {
+        secondLargest = largest;
+        largest = num;
+    } else if (num > secondLargest && num !== largest) {
+        secondLargest = num;
+    }
+}
+
+console.log(secondLargest);
+
+Output:
+80
+
+
+56. Find Second Smallest
+------------------------
+const arr: number[] = [10, 5, 20, 2, 8];
+const unique: number[] = [...new Set<number>(arr)];
+unique.sort((a: number, b: number): number => a - b);
+
+const secondSmallest: number = unique[1];
+console.log(secondSmallest);
+
+Output:
+5
+
+
+57. Sum Array Elements
+----------------------
+const arr: number[] = [10, 20, 30, 40];
+
+const sum: number = arr.reduce(
+    (total: number, num: number): number => total + num,
+    0
+);
+
+console.log(sum);
+
+Output:
+100
+
+
+58. Average Array Elements
+--------------------------
+const arr: number[] = [10, 20, 30, 40];
+
+const sum: number = arr.reduce(
+    (total: number, num: number): number => total + num,
+    0
+);
+
+const average: number = sum / arr.length;
+console.log(average);
+
+Output:
+25
+
+
+59. Reverse Array
+-----------------
+const arr: number[] = [1, 2, 3, 4, 5];
+const result: number[] = [...arr].reverse();
+console.log(result);
+
+Output:
+[5,4,3,2,1]
+
+
+60. Reverse Array Without reverse()
+-----------------------------------
+const arr: number[] = [1, 2, 3, 4, 5];
+const result: number[] = [];
+
+for (let i: number = arr.length - 1; i >= 0; i--) {
+    result.push(arr[i]);
+}
+
+console.log(result);
+
+Output:
+[5,4,3,2,1]
+
+
+61. Sort Array Ascending
+------------------------
+const arr: number[] = [30, 10, 50, 20];
+
+arr.sort((a: number, b: number): number => a - b);
+
+console.log(arr);
+
+Output:
+[10,20,30,50]
+
+
+62. Sort Array Descending
+-------------------------
+const arr: number[] = [30, 10, 50, 20];
+
+arr.sort((a: number, b: number): number => b - a);
+
+console.log(arr);
+
+Output:
+[50,30,20,10]
+
+
+63. Remove Duplicates
+---------------------
+const arr: number[] = [1, 2, 2, 3, 3, 4];
+const unique: Set<number> = new Set<number>(arr);
+const result: number[] = [...unique];
+
+console.log(result);
+
+Output:
+[1,2,3,4]
+
+
+64. Find Duplicate Numbers
+--------------------------
+const arr: number[] = [1, 2, 3, 2, 4, 3];
+const seen: Set<number> = new Set<number>();
+const duplicates: Set<number> = new Set<number>();
+
+for (const num of arr) {
+    if (seen.has(num)) {
+        duplicates.add(num);
+    }
+    seen.add(num);
+}
+
+const result: number[] = [...duplicates];
+console.log(result);
+
+Output:
+[2,3]
+
+
+65. Frequency of Array Elements
+-------------------------------
+const arr: number[] = [1, 2, 2, 3, 3, 3];
+const frequency: Map<number, number> = new Map<number, number>();
+
+for (const num of arr) {
+    frequency.set(num, (frequency.get(num) ?? 0) + 1);
+}
+
+console.log(frequency);
+
+Output:
+1 => 1
+2 => 2
+3 => 3
+
+
+66. Find Even Numbers
+---------------------
+const arr: number[] = [1, 2, 3, 4, 5, 6];
+
+const evenNumbers: number[] = arr.filter(
+    (num: number): boolean => num % 2 === 0
+);
+
+console.log(evenNumbers);
+
+Output:
+[2,4,6]
+
+
+67. Find Odd Numbers
+--------------------
+const arr: number[] = [1, 2, 3, 4, 5, 6];
+
+const oddNumbers: number[] = arr.filter(
+    (num: number): boolean => num % 2 !== 0
+);
+
+console.log(oddNumbers);
+
+Output:
+[1,3,5]
+
+
+68. Count Even and Odd Numbers
+------------------------------
+const arr: number[] = [1, 2, 3, 4, 5];
+
+let even: number = 0;
+let odd: number = 0;
+
+for (const num of arr) {
+    if (num % 2 === 0) {
+        even++;
+    } else {
+        odd++;
+    }
+}
+
+console.log(even, odd);
+
+Output:
+2 3
+
+
+69. Find Positive and Negative Numbers
+--------------------------------------
+const arr: number[] = [-5, 10, -2, 20, 0];
+
+const positive: number[] = arr.filter(
+    (num: number): boolean => num > 0
+);
+
+const negative: number[] = arr.filter(
+    (num: number): boolean => num < 0
+);
+
+console.log(positive);
+console.log(negative);
+
+Output:
+[10,20]
+[-5,-2]
+
+
+70. Merge Two Arrays
+--------------------
+const arr1: number[] = [1, 2, 3];
+const arr2: number[] = [4, 5, 6];
+
+const result: number[] = [...arr1, ...arr2];
+console.log(result);
+
+Output:
+[1,2,3,4,5,6]
+
+
+71. Common Elements Between Arrays
+----------------------------------
+const arr1: number[] = [1, 2, 3, 4];
+const arr2: number[] = [3, 4, 5, 6];
+
+const result: number[] = arr1.filter(
+    (num: number): boolean => arr2.includes(num)
+);
+
+console.log(result);
+
+Output:
+[3,4]
+
+
+72. Elements in First but Not Second
+------------------------------------
+const arr1: number[] = [1, 2, 3, 4];
+const arr2: number[] = [3, 4, 5];
+
+const result: number[] = arr1.filter(
+    (num: number): boolean => !arr2.includes(num)
+);
+
+console.log(result);
+
+Output:
+[1,2]
+
+
+73. Find Missing Number
+-----------------------
+const arr: number[] = [1, 2, 3, 5];
+const n: number = 5;
+
+const expectedSum: number = (n * (n + 1)) / 2;
+
+const actualSum: number = arr.reduce(
+    (sum: number, num: number): number => sum + num,
+    0
+);
+
+const missing: number = expectedSum - actualSum;
+console.log(missing);
+
+Output:
+4
+
+
+74. Find Multiple Missing Numbers
+---------------------------------
+const arr: number[] = [1, 3, 5, 6];
+const missingNumbers: number[] = [];
+
+for (let i: number = 1; i <= 6; i++) {
+    if (!arr.includes(i)) {
+        missingNumbers.push(i);
+    }
+}
+
+console.log(missingNumbers);
+
+Output:
+[2,4]
+
+
+75. Move Zeros to End
+---------------------
+const arr: number[] = [0, 1, 0, 3, 12];
+
+const nonZeros: number[] = arr.filter(
+    (num: number): boolean => num !== 0
+);
+
+const zeros: number[] = arr.filter(
+    (num: number): boolean => num === 0
+);
+
+const result: number[] = [...nonZeros, ...zeros];
+console.log(result);
+
+Output:
+[1,3,12,0,0]
+
+
+76. Move Zeros Without Extra Array
+----------------------------------
+const arr: number[] = [0, 1, 0, 3, 12];
+let index: number = 0;
+
+for (const num of arr) {
+    if (num !== 0) {
+        arr[index] = num;
+        index++;
+    }
+}
+
+while (index < arr.length) {
+    arr[index] = 0;
+    index++;
+}
+
+console.log(arr);
+
+Output:
+[1,3,12,0,0]
+
+
+77. Rotate Array Left
+---------------------
+const arr: number[] = [1, 2, 3, 4, 5];
+const k: number = 2;
+
+const result: number[] = [
+    ...arr.slice(k),
+    ...arr.slice(0, k)
+];
+
+console.log(result);
+
+Output:
+[3,4,5,1,2]
+
+
+78. Rotate Array Right
+----------------------
+const arr: number[] = [1, 2, 3, 4, 5];
+const k: number = 2;
+
+const result: number[] = [
+    ...arr.slice(-k),
+    ...arr.slice(0, -k)
+];
+
+console.log(result);
+
+Output:
+[4,5,1,2,3]
+
+
+79. Find Pair With Given Sum
+----------------------------
+const arr: number[] = [2, 7, 11, 15];
+const target: number = 9;
+const seen: Set<number> = new Set<number>();
+let pair: [number, number] | null = null;
+
+for (const num of arr) {
+    const required: number = target - num;
+
+    if (seen.has(required)) {
+        pair = [required, num];
+        break;
+    }
+
+    seen.add(num);
+}
+
+console.log(pair);
+
+Output:
+[2,7]
+
+
+80. Two Sum - Return Indexes
+----------------------------
+function twoSum(nums: number[], target: number): number[] {
+    const map: Map<number, number> = new Map<number, number>();
+
+    for (let i: number = 0; i < nums.length; i++) {
+        const required: number = target - nums[i];
+        const index: number | undefined = map.get(required);
+
+        if (index !== undefined) {
+            return [index, i];
+        }
+
+        map.set(nums[i], i);
+    }
+
+    return [];
+}
+
+const result: number[] = twoSum([2, 7, 11, 15], 9);
+console.log(result);
+
+Output:
+[0,1]
+
+
+81. Find All Pairs With Given Sum
+---------------------------------
+const arr: number[] = [1, 2, 3, 4, 5, 6];
+const target: number = 7;
+const seen: Set<number> = new Set<number>();
+const pairs: Array<[number, number]> = [];
+
+for (const num of arr) {
+    const required: number = target - num;
+
+    if (seen.has(required)) {
+        pairs.push([required, num]);
+    }
+
+    seen.add(num);
+}
+
+console.log(pairs);
+
+Output:
+[[3,4],[2,5],[1,6]]
+
+
+82. Find Consecutive Duplicate Numbers
+--------------------------------------
+const arr: number[] = [1, 2, 2, 3, 4, 4];
+const duplicates: number[] = [];
+
+for (let i: number = 0; i < arr.length - 1; i++) {
+    if (arr[i] === arr[i + 1]) {
+        duplicates.push(arr[i]);
+    }
+}
+
+console.log(duplicates);
+
+Output:
+[2,4]
+
+
+83. Flatten Nested Array
+------------------------
+const arr: unknown[] = [1, [2, [3, 4]], 5];
+const result: unknown[] = arr.flat(Infinity);
+console.log(result);
+
+Output:
+[1,2,3,4,5]
+
+
+84. Flatten Array Without flat()
+--------------------------------
+type NestedNumberArray = Array<number | NestedNumberArray>;
+
+function flatten(arr: NestedNumberArray): number[] {
+    const result: number[] = [];
+
+    for (const item of arr) {
+        if (Array.isArray(item)) {
+            result.push(...flatten(item));
+        } else {
+            result.push(item);
+        }
+    }
+
+    return result;
+}
+
+const nested: NestedNumberArray = [1, [2, [3, 4]], 5];
+console.log(flatten(nested));
+
+Output:
+[1,2,3,4,5]
+
+
+85. Chunk Array
+---------------
+const arr: number[] = [1, 2, 3, 4, 5, 6];
+const size: number = 2;
+const chunks: number[][] = [];
+
+for (let i: number = 0; i < arr.length; i += size) {
+    const chunk: number[] = arr.slice(i, i + size);
+    chunks.push(chunk);
+}
+
+console.log(chunks);
+
+Output:
+[[1,2],[3,4],[5,6]]
+
+
+86. Find Intersection
+---------------------
+const arr1: number[] = [1, 2, 2, 3, 4];
+const arr2: number[] = [2, 3, 5];
+
+const set2: Set<number> = new Set<number>(arr2);
+const unique1: Set<number> = new Set<number>(arr1);
+
+const result: number[] = [...unique1].filter(
+    (num: number): boolean => set2.has(num)
+);
+
+console.log(result);
+
+Output:
+[2,3]
+
+
+87. Find Union
+--------------
+const arr1: number[] = [1, 2, 3];
+const arr2: number[] = [3, 4, 5];
+
+const unionSet: Set<number> = new Set<number>([...arr1, ...arr2]);
+const result: number[] = [...unionSet];
+
+console.log(result);
+
+Output:
+[1,2,3,4,5]
+
+
+88. Find Element Appearing Only Once
+------------------------------------
+const arr: number[] = [1, 2, 2, 3, 3];
+
+const result: number | undefined = arr.find(
+    (num: number): boolean =>
+        arr.indexOf(num) === arr.lastIndexOf(num)
+);
+
+console.log(result);
+
+Output:
+1
+
+
+89. Single Number Using XOR
+---------------------------
+const arr: number[] = [2, 2, 1, 4, 4];
+let result: number = 0;
+
+for (const num of arr) {
+    result ^= num;
+}
+
+console.log(result);
+
+Output:
+1
+
+
+90. Find Most Frequent Number
+-----------------------------
+const arr: number[] = [1, 2, 2, 3, 3, 3];
+const frequency: Map<number, number> = new Map<number, number>();
+
+for (const num of arr) {
+    frequency.set(num, (frequency.get(num) ?? 0) + 1);
+}
+
+let result: number = arr[0];
+let maxCount: number = 0;
+
+for (const [num, count] of frequency) {
+    if (count > maxCount) {
+        maxCount = count;
+        result = num;
+    }
+}
+
+console.log(result);
+
+Output:
+3
+
+
+91. Find Top 3 Largest Numbers
+------------------------------
+const arr: number[] = [10, 50, 20, 80, 90, 30];
+const unique: number[] = [...new Set<number>(arr)];
+
+unique.sort((a: number, b: number): number => b - a);
+
+const result: number[] = unique.slice(0, 3);
+console.log(result);
+
+Output:
+[90,80,50]
+
+
+92. Find Numbers Greater Than Average
+-------------------------------------
+const arr: number[] = [10, 20, 30, 40, 50];
+
+const sum: number = arr.reduce(
+    (total: number, num: number): number => total + num,
+    0
+);
+
+const average: number = sum / arr.length;
+
+const result: number[] = arr.filter(
+    (num: number): boolean => num > average
+);
+
+console.log(result);
+
+Output:
+[40,50]
+
+
+93. Square Every Number
+-----------------------
+const arr: number[] = [1, 2, 3, 4];
+
+const result: number[] = arr.map(
+    (num: number): number => num * num
+);
+
+console.log(result);
+
+Output:
+[1,4,9,16]
+
+
+94. Filter Employee Objects by Status
+-------------------------------------
+interface EmployeeStatus {
+    id: number;
+    name: string;
+    status: "active" | "inactive";
+}
+
+const employees: EmployeeStatus[] = [
+    { id: 1, name: "Suraj", status: "active" },
+    { id: 2, name: "John", status: "inactive" },
+    { id: 3, name: "Mike", status: "active" }
+];
+
+const activeEmployees: EmployeeStatus[] = employees.filter(
+    (emp: EmployeeStatus): boolean => emp.status === "active"
+);
+
+console.log(activeEmployees);
+
+Output:
+[
+  { id: 1, name: "Suraj", status: "active" },
+  { id: 3, name: "Mike", status: "active" }
+]
+
+
+95. Get Only Employee Names
+---------------------------
+interface Employee {
+    id: number;
+    name: string;
+}
+
+const employees: Employee[] = [
+    { id: 1, name: "Suraj" },
+    { id: 2, name: "John" },
+    { id: 3, name: "Mike" }
+];
+
+const names: string[] = employees.map(
+    (emp: Employee): string => emp.name
+);
+
+console.log(names);
+
+Output:
+["Suraj","John","Mike"]
+
+
+96. Find Specific Object
+------------------------
+interface Employee {
+    id: number;
+    name: string;
+}
+
+const employees: Employee[] = [
+    { id: 101, name: "Suraj" },
+    { id: 102, name: "John" },
+    { id: 103, name: "Mike" }
+];
+
+const employee: Employee | undefined = employees.find(
+    (emp: Employee): boolean => emp.name === "John"
+);
+
+console.log(employee);
+
+Output:
+{ id: 102, name: "John" }
+
+
+97. Find Highest Salary Employee
+--------------------------------
+interface EmployeeSalary {
+    name: string;
+    salary: number;
+}
+
+const employees: EmployeeSalary[] = [
+    { name: "Suraj", salary: 80000 },
+    { name: "John", salary: 60000 },
+    { name: "Mike", salary: 90000 }
+];
+
+const highest: EmployeeSalary = employees.reduce(
+    (max: EmployeeSalary, emp: EmployeeSalary): EmployeeSalary =>
+        emp.salary > max.salary ? emp : max
+);
+
+console.log(highest);
+
+Output:
+{ name: "Mike", salary: 90000 }
+
+
+98. Group Employees by Department
+---------------------------------
+interface EmployeeDepartment {
+    name: string;
+    dept: string;
+}
+
+const employees: EmployeeDepartment[] = [
+    { name: "Suraj", dept: "QA" },
+    { name: "John", dept: "Dev" },
+    { name: "Mike", dept: "QA" }
+];
+
+const grouped: Record<string, EmployeeDepartment[]> = {};
+
+for (const emp of employees) {
+    if (!grouped[emp.dept]) {
+        grouped[emp.dept] = [];
+    }
+
+    grouped[emp.dept].push(emp);
+}
+
+console.log(grouped);
+
+Output:
+{
+  QA: [
+    { name: "Suraj", dept: "QA" },
+    { name: "Mike", dept: "QA" }
+  ],
+  Dev: [
+    { name: "John", dept: "Dev" }
+  ]
+}
+
+
+99. Maximum Sum Subarray - Kadane Algorithm
+------------------------------------------
+function maxSubArray(nums: number[]): number {
+    let currentSum: number = nums[0];
+    let maxSum: number = nums[0];
+
+    for (let i: number = 1; i < nums.length; i++) {
+        currentSum = Math.max(nums[i], currentSum + nums[i]);
+        maxSum = Math.max(maxSum, currentSum);
+    }
+
+    return maxSum;
+}
+
+const result: number = maxSubArray(
+    [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+);
+
+console.log(result);
+
+Output:
+6
+
+
+100. Longest Consecutive Sequence
+---------------------------------
+function longestConsecutive(nums: number[]): number {
+    const numbers: Set<number> = new Set<number>(nums);
+    let longest: number = 0;
+
+    for (const num of numbers) {
+        if (!numbers.has(num - 1)) {
+            let current: number = num;
+            let length: number = 1;
+
+            while (numbers.has(current + 1)) {
+                current++;
+                length++;
+            }
+
+            longest = Math.max(longest, length);
+        }
+    }
+
+    return longest;
+}
+
+const result: number = longestConsecutive(
+    [100, 4, 200, 1, 3, 2]
+);
+
+console.log(result);
+
+Output:
+4
+
+
+===============================================================
+FULL TYPESCRIPT STYLE USED IN THIS FILE
+===============================================================
+
+Examples of explicit TypeScript types used:
+
+const str: string = "Suraj";
+const count: number = 10;
+const isValid: boolean = true;
+
+const names: string[] = ["Suraj", "John"];
+const numbers: number[] = [1, 2, 3];
+
+const map: Map<string, number> = new Map<string, number>();
+const set: Set<number> = new Set<number>();
+
+function add(a: number, b: number): number {
+    return a + b;
+}
+
+interface Employee {
+    id: number;
+    name: string;
+}
+
+const employees: Employee[] = [];
+
+===============================================================

@@ -1,0 +1,34 @@
+import { test, expect } from '@playwright/test';
+
+test('Find specific name and break the loop', async ({ request }) => {
+
+  const response = await request.get(
+    'https://api.example.com/users'
+  );
+
+  expect(response.status()).toBe(200);
+
+  const body = await response.json();
+
+  const expectedName = 'Suraj';
+
+  let isFound = false;
+
+  for (const user of body) {
+
+    if (user.name === expectedName) {
+
+      expect(user.name).toBe('Suraj');
+      expect(user.status).toBe('active');
+
+      console.log('User Found:', user);
+
+      isFound = true;
+
+      break;
+    }
+  }
+
+  expect(isFound).toBeTruthy();
+
+});
