@@ -1,0 +1,172 @@
+1)Locators in playwright
+
+page.getByRole()
+page.getByText()
+page.getByLabel()
+page.getByPlaceholder()
+page.getByTestId()
+page.getByAltText()
+page.getByTitle()
+page.locator()
+
+==========================================================================
+2)How do we handle multiple elements with same locator?
+
+When multiple elements match the same locator in Playwright, we can handle them using first(), last(), nth(), all().
+
+example:
+
+import { test, expect } from '@playwright/test';
+
+test('Handle multiple elements with same locator', async ({ page }) => {
+
+  await page.goto('https://example.com');
+
+  // Suppose multiple buttons have the same locator
+  const buttons = page.locator('button');
+
+  // 1. Click first matching element
+  await buttons.first().click();
+
+  // 2. Click last matching element
+  await buttons.last().click();
+
+  // 3. Click a specific element using index
+  // nth(0) = first
+  // nth(1) = second
+  // nth(2) = third
+  await buttons.nth(1).click();
+
+  // 4. Get total number of matching elements
+  const count = await buttons.count();
+  console.log('Total buttons:', count);
+
+  // 5. Loop through all matching elements
+  for (let i = 0; i < count; i++) {
+    const text = await buttons.nth(i).innerText();
+    console.log(`Button ${i + 1}: ${text}`);
+  }
+
+  // 6. Use all() to get all locators
+  const allButtons = await buttons.all();
+
+  for (const button of allButtons) {
+    console.log(await button.innerText());
+  }
+
+  // 7. Make the locator more specific
+  const loginButton = page
+    .locator('button')
+    .filter({ hasText: 'Login' });
+
+  await loginButton.click();
+});
+
+==========================================================================
+3)what is the use of nth method in plawright?
+
+In Playwright, nth() is used when one locator matches multiple elements and 
+we want to select one specific element by its index.
+
+
+example:
+const buttons = page.locator('button');
+
+await buttons.nth(0).click(); // First button
+await buttons.nth(1).click(); // Second button
+await buttons.nth(2).click(); // Third button
+==========================================================================
+4)What is the locator chaining concept in Playwright?
+
+Locator chaining in Playwright means combining multiple locators step by step to reach a specific element.
+
+For example, first locate a product card, then locate the button inside that card:
+const product = page.locator('.product-card').filter({ hasText: 'iPhone' });
+await product.getByRole('button', { name: 'Add to Cart' }).click();
+==========================================================================
+5)What is the locator chaining concept in Playwright?
+
+If a Playwright locator matches multiple elements and you perform an action like click() that expects one element, Playwright throws a Strict Mode Violation.
+
+Example:
+
+const buttons = page.locator('button');
+
+await buttons.click();
+strict mode violation:
+locator('button') resolved to 3 elements
+
+==========================================================================
+6)How do we handle dynamic locator?
+
+In Playwright, we handle dynamic elements by using stable locators instead of values that keep changing.
+
+page.locator('#login_12345');
+await page.getByRole('button', { name: 'Login' }).click();
+
+which one is faster css selector or xpath
+// CSS
+page.locator('#username')
+
+// XPath
+page.locator("//input[@id='username']")
+CSS is usually preferred because it is shorter, easier to read, and browsers handle CSS selectors very efficiently.
+==========================================================================
+7)Difference between CSS Selector and Xpath
+
+CSS Selector is simpler and mainly uses id, class, and attributes to locate elements. XPath is more powerful for navigating complex DOM relationships such as parent, child, sibling, and ancestor. In Playwright, I prefer built-in locators first, then CSS, and I use XPath only when required.
+==========================================================================
+8)Absolute xpath and relative xpath
+
+“Absolute XPath starts from the root of the HTML document and follows the complete DOM path, so it is long and easily breaks when the page structure changes. Relative XPath starts from any matching element using // and is shorter, more readable, and more maintainable. Therefore, I prefer relative XPath over absolute XPath in automation.”
+Easy trick:
+Absolute = Full Address
+==========================================================================
+9)What is the difference between locator and locator all?
+
+-->locator() method return the Locator object where as Returns an array of Locator objects
+for locator-->Supports Playwright auto-waiting for actions
+for locator.all()-->all() itself does not wait for elements to appear
+locator-->Best for normal Playwright actions
+locator.all()-->Useful when you want to loop through all matched elements
+
+==========================================================================
+10)What is the difference between $ and locator method?
+
+$()--->Does not Supports auto-waiting behavior-->Returns an ElementHandle
+locator()--->Supports Playwright auto-waiting and retryability-->Returns a Locator
+
+==========================================================================
+11)How do we double click on element?
+
+In Playwright, we use the dblclick() method to double-click an element.
+await page.getByRole('button', { name: 'Edit' }).dblclick();
+
+==========================================================================
+12)How do you mouse over an element
+await page.getByText('Products').hover();
+==========================================================================
+13)how do we drag and drop element?
+const source = page.locator('#source');
+const target = page.locator('#target');
+
+await source.dragTo(target);
+==========================================================================
+14)How do you scroll down/up to an element's location?
+
+const element = page.getByText('Footer');
+
+await element.scrollIntoViewIfNeeded();
+
+// Scroll down
+await page.mouse.wheel(0, 500);
+
+// Scroll up
+await page.mouse.wheel(0, -500);
+I can use page.mouse.wheel(). A positive Y value scrolls down and a negative Y value scrolls up.
+==========================================================================
+15)What is the difference between the hover() method and mouse.move()?
+
+hover() is used to move the mouse over a specific element using a locator. mouse.move() moves the mouse to specific X and Y coordinates. In normal automation, I prefer hover() because it is easier and more reliable, while mouse.move() is useful for low-level mouse interactions
+==========================================================================
+
