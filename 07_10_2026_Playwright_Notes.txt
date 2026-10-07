@@ -169,4 +169,173 @@ I can use page.mouse.wheel(). A positive Y value scrolls down and a negative Y v
 
 hover() is used to move the mouse over a specific element using a locator. mouse.move() moves the mouse to specific X and Y coordinates. In normal automation, I prefer hover() because it is easier and more reliable, while mouse.move() is useful for low-level mouse interactions
 ==========================================================================
+16)How do we find the broken link in playwright
+
+import { test, expect } from '@playwright/test';
+
+test('Find broken links', async ({ page, request }) => {
+
+  await page.goto('https://example.com');
+
+  const links = page.locator('a');
+
+  const count = await links.count();
+
+  for (let i = 0; i < count; i++) {
+
+    const href = await links.nth(i).getAttribute('href');
+
+    if (!href) {
+      continue;
+    }
+
+    // Skip non-http links
+    if (
+      href.startsWith('#') ||
+      href.startsWith('javascript:') ||
+      href.startsWith('mailto:') ||
+      href.startsWith('tel:')
+    ) {
+      continue;
+    }
+
+    const url = new URL(href, page.url()).toString();
+
+    const response = await request.get(url);
+
+    console.log(url, response.status());
+
+    if (response.status() >= 400) {
+      console.log(`Broken Link: ${url}`);
+    }
+  }
+});
+
+We pass href and page.url() because some links contain relative paths like /products. page.url()
+ acts as the base URL and converts that relative path into a complete URL.
+==========================================================================
+17)Can we create fixtures for test data file?
+
+Yes. In Playwright, you can create custom fixtures for test data 
+so the same data can be reused across multiple test files.
+
+// testDataFixture.ts
+
+import { test as base } from '@playwright/test';
+
+type TestData = {
+  username: string;
+  password: string;
+};
+
+type MyFixtures = {
+  testData: TestData;
+};
+
+export const test = base.extend<MyFixtures>({
+
+  testData: async ({}, use) => {
+
+    const data = {
+      username: 'Suraj',
+      password: 'Password123'
+    };
+
+    await use(data);
+  }
+
+});
+
+export { expect } from '@playwright/test';
+-----------------------------------------------------
+import { test, expect } from './testDataFixture';
+
+test('Login test', async ({ page, testData }) => {
+
+  await page.goto('https://example.com/login');
+
+  await page.getByLabel('Username').fill(testData.username);
+
+  await page.getByLabel('Password').fill(testData.password);
+
+  await page.getByRole('button', { name: 'Login' }).click();
+});
+
+==========================================================================
+18)Which dependency injection concept have you used in your framework?
+
+In my Playwright framework, I use fixture-based dependency injection.
+For example, my loginPage fixture depends on Playwright’s built-in page fixture:
+import { test as base } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+
+type MyFixtures = {
+  loginPage: LoginPage;
+};
+
+export const test = base.extend<MyFixtures>({
+
+  loginPage: async ({ page }, use) => {
+
+    const loginPage = new LoginPage(page);
+
+    await use(loginPage);
+  }
+
+});
+
+Then in the test:
+
+test('Login test', async ({ loginPage }) => {
+
+  await loginPage.login('Suraj', 'Password123');
+
+});
+
+==========================================================================
+19)what are the different types of load states present in the playwright?
+
+In Playwright, the main load states are:
+domcontentloaded-->HTML DOM is loaded, but images/CSS may still be loading
+load-->Page and dependent resources like images/styles are loaded
+networkidle-->No network connections for a short period; generally not recommended as the main readiness check
+commit-->Navigation response is received and the document starts loading
+
+await page.goto('https://example.com');
+
+await page.waitForLoadState('domcontentloaded');
+await page.waitForLoadState('load');
+await page.waitForLoadState('networkidle');
+
+Interview answer
+“Playwright supports load states such as domcontentloaded, load, networkidle, and commit. domcontentloaded means the DOM is ready, load means the complete page resources are loaded, and networkidle means network activity has stopped for a short time. In real projects, I usually rely on Playwright auto-waiting or wait for a specific element instead of depending heavily on networkidle.”
+
+==========================================================================
+20)what is networkidle in playwright
+
+
+what is networkidle in playwright
+networkidle is a Playwright load state that waits until the page has no ongoing network connections for at least 500 ms
+
+==========================================================================
+21)what are the scalability and maintanability in test automation framework?
+
+In a test automation framework, scalability means the framework can handle more tests, more modules, more browsers, more environments, and more test data without becoming difficult to manage.
+For example, a scalable Playwright framework should support:
+- adding hundreds of new test cases easily
+- running tests in parallel
+- multiple environments like QA, Stage, Prod
+- multiple browsers
+- reusable fixtures and utilities
+- CI/CD execution
+Maintainability means the framework is easy to understand, update, debug, and modify when the application changes.
+For example:
+- use Page Object Model
+- keep locators in page classes
+- create reusable methods
+- separate test data from test logic
+- use fixtures for common setup
+- avoid duplicate code
+Simple interview answer
+“Scalability means the framework can grow easily when we add more test cases, modules, browsers, environments, or parallel execution. Maintainability means the framework is easy to update and manage when the application changes. I improve both by using Page Object Model, reusable utilities, fixtures, proper folder structure, test-data separation, and CI/CD support.”
 
