@@ -1,0 +1,12 @@
+Interview Answer (Simple English – 4 Lines)
+1. Fixtures in Playwright are used to set up and clean up test resources automatically.
+2. Playwright provides built-in fixtures such as page, browser, context, and request.
+3. We can also create custom fixtures for login, test data, API clients, and Page Object Model (POM) classes.
+4. Fixtures help us reduce duplicate code and make our automation framework reusable, maintainable, and scalable.
+1. Built-in Fixtures in Playwright
+Fixture	Purpose
+page	Provides a new browser page for testing
+context	Provides an isolated browser context
+browser	Provides a browser instance
+request	Provides an API request context
+browserName	Provides the browser engine name
