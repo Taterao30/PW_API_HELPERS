@@ -1,0 +1,482 @@
+JAVASCRIPT JSON OBJECT & ARRAY OPERATIONS - SDET INTERVIEW GUIDE
+===========================================================
+For Playwright / TypeScript / API Automation Interviews
+Run examples separately in Node.js or browser console.
+
+IMPORTANT BASICS
+----------------
+- JSON is a text format; JavaScript objects and arrays are in-memory values.
+- JSON.parse(jsonText) converts JSON text to a JS value.
+- JSON.stringify(value) converts a JS value to JSON text.
+- find() returns the first matching element or undefined.
+- filter() returns an array of all matching elements.
+- some() checks whether at least one element matches; every() checks all.
+- sort() mutates the original array. Use [...arr].sort() to preserve it.
+- Comparisons involving strings can be case-sensitive; normalize as needed.
+- JSON has no undefined, functions, or comments.
+
+SHARED SAMPLE DATA (run before examples 3 through 34)
+------------------------------------------------------
+const employees = [
+  { id: 101, name: 'Amit', department: 'QA', salary: 70000, active: true,
+    skills: ['Playwright', 'JavaScript'], address: { city: 'Pune', pin: 411001 } },
+  { id: 102, name: 'Neha', department: 'Dev', salary: 95000, active: true,
+    skills: ['Java', 'SQL'], address: { city: 'Mumbai', pin: 400001 } },
+  { id: 103, name: 'Ravi', department: 'QA', salary: 80000, active: false,
+    skills: ['Selenium', 'Java'], address: { city: 'Pune', pin: 411002 } },
+  { id: 104, name: 'Sara', department: 'QA', salary: 95000, active: true,
+    skills: ['Playwright', 'TypeScript'], address: { city: 'Bengaluru', pin: 560001 } },
+  { id: 105, name: 'Iqbal', department: 'Dev', salary: 60000, active: true,
+    skills: ['Python', 'SQL'], address: { city: 'Pune', pin: 411003 } }
+];
+
+01. PARSE A JSON RESPONSE
+-------------------------
+const jsonText = '{"id":101,"name":"Amit","active":true}';
+const obj = JSON.parse(jsonText);
+console.log(obj.name, obj.active);
+// Output: Amit true
+
+02. CONVERT OBJECT TO JSON STRING
+---------------------------------
+const obj = { id: 101, name: 'Amit' };
+console.log(JSON.stringify(obj));
+// Output: {"id":101,"name":"Amit"}
+
+03. ACCESS PROPERTY USING DOT / BRACKETS
+----------------------------------------
+console.log(employees[0].name);
+console.log(employees[0]['department']);
+// Output: Amit; QA
+
+04. SEARCH EMPLOYEE BY ID (find)
+--------------------------------
+const found = employees.find(e => e.id === 103);
+console.log(found?.name ?? 'Not found');
+// Output: Ravi
+
+05. SEARCH BY NAME (case insensitive)
+-------------------------------------
+const found = employees.find(e => e.name.toLowerCase() === 'neha');
+console.log(found?.id);
+// Output: 102
+
+06. FILTER ALL QA EMPLOYEES
+---------------------------
+const result = employees.filter(e => e.department === 'QA');
+console.log(result.map(e => e.name));
+// Output: [ 'Amit', 'Ravi', 'Sara' ]
+
+07. FILTER USING MULTIPLE CONDITIONS (AND)
+------------------------------------------
+const result = employees.filter(e => e.department === 'QA' && e.active);
+console.log(result.map(e => e.name));
+// Output: [ 'Amit', 'Sara' ]
+
+08. FILTER USING OR CONDITION
+-----------------------------
+const result = employees.filter(e => e.department === 'Dev' || e.salary >= 95000);
+console.log(result.map(e => e.name));
+// Output: [ 'Neha', 'Sara', 'Iqbal' ]
+
+09. FIND BY NESTED PROPERTY (city)
+---------------------------------
+const result = employees.filter(e => e.address.city === 'Pune');
+console.log(result.map(e => e.name));
+// Output: [ 'Amit', 'Ravi', 'Iqbal' ]
+
+10. FIND EMPLOYEES HAVING A PARTICULAR SKILL
+--------------------------------------------
+const result = employees.filter(e => e.skills.includes('Playwright'));
+console.log(result.map(e => e.name));
+// Output: [ 'Amit', 'Sara' ]
+
+11. PARTIAL TEXT SEARCH
+-----------------------
+const result = employees.filter(e => e.name.toLowerCase().includes('a'));
+console.log(result.map(e => e.name));
+// Output: [ 'Amit', 'Neha', 'Ravi', 'Sara', 'Iqbal' ]
+
+12. CHECK IF ANY MATCH EXISTS (some)
+------------------------------------
+console.log(employees.some(e => !e.active));
+// Output: true
+
+13. CHECK ALL MATCH (every)
+---------------------------
+console.log(employees.every(e => e.salary >= 60000));
+// Output: true
+
+14. GET INDEX OF A MATCH (findIndex)
+-----------------------------------
+console.log(employees.findIndex(e => e.id === 104));
+// Output: 3 (-1 means no match)
+
+15. SORT BY SALARY ASCENDING (no mutation)
+-----------------------------------------
+const sorted = [...employees].sort((a, b) => a.salary - b.salary);
+console.log(sorted.map(e => `${e.name}:${e.salary}`));
+// Output: [ 'Iqbal:60000', 'Amit:70000', 'Ravi:80000', 'Neha:95000', 'Sara:95000' ]
+
+16. SORT BY SALARY DESCENDING
+-----------------------------
+const sorted = [...employees].sort((a, b) => b.salary - a.salary);
+console.log(sorted.map(e => e.name));
+// Output: [ 'Neha', 'Sara', 'Ravi', 'Amit', 'Iqbal' ]
+
+17. SORT BY NAME ALPHABETICALLY
+-------------------------------
+const sorted = [...employees].sort((a, b) => a.name.localeCompare(b.name));
+console.log(sorted.map(e => e.name));
+// Output: [ 'Amit', 'Iqbal', 'Neha', 'Ravi', 'Sara' ]
+
+18. SORT BY MULTIPLE FIELDS (department then salary DESC)
+---------------------------------------------------------
+const sorted = [...employees].sort((a, b) =>
+  a.department.localeCompare(b.department) || b.salary - a.salary
+);
+console.log(sorted.map(e => `${e.department}:${e.name}`));
+// Output: [ 'Dev:Neha', 'Dev:Iqbal', 'QA:Sara', 'QA:Ravi', 'QA:Amit' ]
+
+19. FIND MAXIMUM SALARY
+-----------------------
+const max = Math.max(...employees.map(e => e.salary));
+console.log(max);
+// Output: 95000
+
+20. FIND EMPLOYEES WITH MAXIMUM SALARY (ties)
+--------------------------------------------
+const max = Math.max(...employees.map(e => e.salary));
+console.log(employees.filter(e => e.salary === max).map(e => e.name));
+// Output: [ 'Neha', 'Sara' ]
+
+21. FIND SECOND HIGHEST DISTINCT SALARY
+--------------------------------------
+const salaries = [...new Set(employees.map(e => e.salary))].sort((a, b) => b - a);
+console.log(salaries[1]);
+// Output: 80000
+
+22. COUNT MATCHING RECORDS
+--------------------------
+console.log(employees.filter(e => e.department === 'QA').length);
+// Output: 3
+
+23. SUM ALL SALARIES (reduce)
+-----------------------------
+const total = employees.reduce((sum, e) => sum + e.salary, 0);
+console.log(total);
+// Output: 400000
+
+24. AVERAGE SALARY
+------------------
+const avg = employees.reduce((sum, e) => sum + e.salary, 0) / employees.length;
+console.log(avg);
+// Output: 80000
+
+25. GROUP BY DEPARTMENT
+-----------------------
+const grouped = Object.groupBy
+  ? Object.groupBy(employees, e => e.department)
+  : employees.reduce((acc, e) => {
+      (acc[e.department] ??= []).push(e);
+      return acc;
+    }, {});
+console.log(Object.fromEntries(Object.entries(grouped).map(([k, v]) => [k, v.length])));
+// Output: { QA: 3, Dev: 2 }
+
+26. COUNT BY DEPARTMENT (reduce)
+--------------------------------
+const counts = employees.reduce((acc, e) => {
+  acc[e.department] = (acc[e.department] || 0) + 1;
+  return acc;
+}, {});
+console.log(counts);
+// Output: { QA: 3, Dev: 2 }
+
+27. GET ONLY IDS AND NAMES (map)
+--------------------------------
+const simplified = employees.map(({ id, name }) => ({ id, name }));
+console.log(simplified[0]);
+// Output: { id: 101, name: 'Amit' }
+
+28. GET UNIQUE DEPARTMENT NAMES
+-------------------------------
+console.log([...new Set(employees.map(e => e.department))]);
+// Output: [ 'QA', 'Dev' ]
+
+29. FLATTEN NESTED SKILLS AND GET UNIQUE VALUES
+------------------------------------------------
+const uniqueSkills = [...new Set(employees.flatMap(e => e.skills))];
+console.log(uniqueSkills);
+// Output: [ 'Playwright', 'JavaScript', 'Java', 'SQL', 'Selenium', 'TypeScript', 'Python' ]
+
+30. UPDATE EMPLOYEE WITHOUT MUTATING ORIGINAL
+----------------------------------------------
+const updated = employees.map(e => e.id === 103 ? { ...e, active: true } : e);
+console.log(updated.find(e => e.id === 103).active);
+console.log(employees.find(e => e.id === 103).active);
+// Output: true; false
+
+31. UPDATE A NESTED PROPERTY IMMUTABLY
+--------------------------------------
+const updated = employees.map(e => e.id === 101
+  ? { ...e, address: { ...e.address, city: 'Nagpur' } }
+  : e
+);
+console.log(updated[0].address.city, employees[0].address.city);
+// Output: Nagpur Pune
+
+32. DELETE RECORD BY ID (filter)
+--------------------------------
+const remaining = employees.filter(e => e.id !== 102);
+console.log(remaining.map(e => e.id));
+// Output: [ 101, 103, 104, 105 ]
+
+33. ADD A NEW OBJECT WITHOUT MUTATING ORIGINAL
+-----------------------------------------------
+const added = [...employees, { id: 106, name: 'Priya', department: 'QA' }];
+console.log(added.length, employees.length);
+// Output: 6 5
+
+34. PAGINATION WITH slice()
+---------------------------
+const page = 2, size = 2;
+const result = employees.slice((page - 1) * size, page * size);
+console.log(result.map(e => e.id));
+// Output: [ 103, 104 ]
+
+35. REMOVE DUPLICATES BY ID FROM API RESULTS
+--------------------------------------------
+const items = [{ id: 1, name: 'A' }, { id: 2, name: 'B' }, { id: 1, name: 'A2' }];
+const unique = [...new Map(items.map(item => [item.id, item])).values()];
+console.log(unique);
+// Output: [ { id: 1, name: 'A2' }, { id: 2, name: 'B' } ]
+// Map keeps the LAST object for duplicate IDs.
+
+36. COMPARE TWO JSON OBJECTS IGNORING KEY ORDER
+------------------------------------------------
+const a = { id: 1, name: 'Amit' };
+const b = { name: 'Amit', id: 1 };
+const { isDeepStrictEqual } = require('node:util');
+console.log(isDeepStrictEqual(a, b));
+// Output: true
+// JSON.stringify(a) === JSON.stringify(b) is NOT reliable when keys are in a different order.
+
+37. EXTRACT KEYS, VALUES AND ENTRIES
+------------------------------------
+const obj = { id: 101, name: 'Amit', active: true };
+console.log(Object.keys(obj));
+console.log(Object.values(obj));
+console.log(Object.entries(obj));
+// Output: [ 'id', 'name', 'active' ]
+//         [ 101, 'Amit', true ]
+//         [ [ 'id', 101 ], [ 'name', 'Amit' ], [ 'active', true ] ]
+
+38. CHECK WHETHER A PROPERTY EXISTS
+------------------------------------
+const obj = { id: 1, name: null };
+console.log(Object.hasOwn(obj, 'name'));
+console.log(Object.hasOwn(obj, 'email'));
+// Output: true; false
+// Do not use Boolean(obj.name) to check presence: null, 0, false are valid values.
+
+39. SAFE ACCESS FOR OPTIONAL / MISSING NESTED DATA
+--------------------------------------------------
+const response = { user: { profile: null } };
+console.log(response.user?.profile?.city ?? 'Unknown');
+// Output: Unknown
+
+40. DEEPLY NESTED API RESPONSE: FIND AN ORDER ITEM
+-------------------------------------------------
+const response = {
+  orders: [
+    { orderId: 'O1', items: [{ sku: 'A', qty: 2 }, { sku: 'B', qty: 1 }] },
+    { orderId: 'O2', items: [{ sku: 'C', qty: 3 }] }
+  ]
+};
+const item = response.orders.flatMap(order => order.items).find(i => i.sku === 'C');
+console.log(item);
+// Output: { sku: 'C', qty: 3 }
+
+41. SEARCH NESTED RECORD AND RETURN PARENT ORDER
+------------------------------------------------
+const response = {
+  orders: [
+    { orderId: 'O1', items: [{ sku: 'A' }] },
+    { orderId: 'O2', items: [{ sku: 'B' }, { sku: 'C' }] }
+  ]
+};
+const order = response.orders.find(o => o.items.some(item => item.sku === 'C'));
+console.log(order?.orderId);
+// Output: O2
+
+42. SEARCH WITH LOOPS AND BREAK AT FIRST MATCH
+----------------------------------------------
+const response = { orders: [
+  { id: 1, items: [{ sku: 'A' }] },
+  { id: 2, items: [{ sku: 'B' }, { sku: 'C' }] }
+] };
+let found = null;
+outer: for (const order of response.orders) {
+  for (const item of order.items) {
+    if (item.sku === 'C') {
+      found = { orderId: order.id, item };
+      break outer;
+    }
+  }
+}
+console.log(found);
+// Output: { orderId: 2, item: { sku: 'C' } }
+
+43. FIND DUPLICATE VALUES IN API RESPONSE
+-----------------------------------------
+const records = [{ email: 'a@test.com' }, { email: 'b@test.com' }, { email: 'a@test.com' }];
+const counts = records.reduce((map, item) => {
+  map.set(item.email, (map.get(item.email) || 0) + 1);
+  return map;
+}, new Map());
+console.log([...counts].filter(([, count]) => count > 1));
+// Output: [ [ 'a@test.com', 2 ] ]
+
+44. MERGE TWO OBJECTS (SHALLOW MERGE)
+-------------------------------------
+const defaults = { timeout: 30000, retries: 0 };
+const overrides = { retries: 2 };
+console.log({ ...defaults, ...overrides });
+// Output: { timeout: 30000, retries: 2 }
+// Nested objects require deliberate deep-merge logic if needed.
+
+45. FILTER BY DATE (ISO TIMESTAMPS)
+-----------------------------------
+const events = [
+  { id: 1, createdAt: '2026-10-01T00:00:00Z' },
+  { id: 2, createdAt: '2026-10-10T00:00:00Z' }
+];
+const since = Date.parse('2026-10-05T00:00:00Z');
+console.log(events.filter(e => Date.parse(e.createdAt) >= since).map(e => e.id));
+// Output: [ 2 ]
+
+46. SORT RECORDS BY TIMESTAMP DESCENDING
+----------------------------------------
+const events = [
+  { id: 1, createdAt: '2026-10-01T00:00:00Z' },
+  { id: 2, createdAt: '2026-10-10T00:00:00Z' }
+];
+console.log([...events].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).map(e => e.id));
+// Output: [ 2, 1 ]
+
+47. OBJECT TO QUERY STRING (API REQUEST)
+----------------------------------------
+const params = new URLSearchParams({ status: 'active', page: '2' });
+console.log(params.toString());
+// Output: status=active&page=2
+
+48. FIND RECORDS WITH MISSING OR INVALID FIELDS
+------------------------------------------------
+const users = [{ id: 1, email: 'a@test.com' }, { id: 2 }, { id: 3, email: '' }];
+const invalid = users.filter(u => typeof u.email !== 'string' || !u.email.trim());
+console.log(invalid.map(u => u.id));
+// Output: [ 2, 3 ]
+
+49. PLAYWRIGHT API: SEARCH RESPONSE DATA
+----------------------------------------
+const { test, expect } = require('@playwright/test');
+test('search users in API response', async ({ request }) => {
+  const response = await request.get('https://jsonplaceholder.typicode.com/users');
+  expect(response.status()).toBe(200);
+  const users = await response.json();
+  expect(Array.isArray(users)).toBe(true);
+  const user = users.find(u => u.id === 3);
+  expect(user).toBeDefined();
+  expect(user).toHaveProperty('email');
+});
+// Expected result: Test passes if service responds with expected data.
+
+50. PLAYWRIGHT API: VALIDATE ALL RECORDS
+----------------------------------------
+const { test, expect } = require('@playwright/test');
+test('every user has required fields', async ({ request }) => {
+  const response = await request.get('https://jsonplaceholder.typicode.com/users');
+  expect(response.ok()).toBeTruthy();
+  const users = await response.json();
+  expect(users.length).toBeGreaterThan(0);
+  for (const user of users) {
+    expect(user.id).toEqual(expect.any(Number));
+    expect(user.name).toEqual(expect.any(String));
+    expect(user.email).toEqual(expect.any(String));
+    expect(user.email).toContain('@');
+  }
+});
+// Expected result: Test passes if all users satisfy the assertions.
+
+51. PLAYWRIGHT API: FILTER AND ASSERT RECORD COUNT
+---------------------------------------------------
+// Inside a Playwright test after receiving the JSON array `users`:
+const selected = users.filter(u => u.address?.city === 'Gwenborough');
+expect(selected.length).toBeGreaterThan(0);
+expect(selected.every(u => u.address.city === 'Gwenborough')).toBe(true);
+// `users` and `expect` here are assumed to be available in the test scope.
+
+52. PLAYWRIGHT API: CHECK AN ARRAY IS SORTED ASCENDING
+-------------------------------------------------------
+// Inside a Playwright test after getting `body` as an array of { price }:
+const prices = body.map(item => item.price);
+const sortedPrices = [...prices].sort((a, b) => a - b);
+expect(prices).toEqual(sortedPrices);
+// Detects server-side sorting failures; do NOT sort actual before comparing.
+
+53. PLAYWRIGHT API: CHECK UNIQUE IDS
+------------------------------------
+// Inside a Playwright test after getting `body` as an array of records:
+const ids = body.map(item => item.id);
+expect(new Set(ids).size).toBe(ids.length);
+// Catches duplicate IDs in an API response.
+
+54. PLAYWRIGHT API: PARTIAL OBJECT MATCH
+----------------------------------------
+// Inside a Playwright test after getting `body` as JSON:
+expect(body).toMatchObject({ id: 101, status: 'active' });
+// Ignores additional properties, but requires matching provided properties.
+
+55. PLAYWRIGHT API: ARRAY CONTAINS EXPECTED OBJECT
+--------------------------------------------------
+// Inside a Playwright test after getting `body` as an array:
+expect(body).toEqual(expect.arrayContaining([
+  expect.objectContaining({ id: 101, status: 'active' })
+]));
+// Passes when at least one element matches; accepts extra array elements/properties.
+
+BONUS - COMMON INTERVIEW DIFFERENCES
+------------------------------------
+find       -> first matching object, or undefined
+filter     -> array of all matching objects (could be [])
+findIndex  -> index of first match, or -1
+map        -> new transformed array
+forEach    -> iteration side effects; returns undefined
+reduce     -> accumulate into number/object/Map/array
+some       -> true if any item matches
+ every     -> true if every item matches (true for empty array)
+includes   -> exact-value presence in array/string
+sort       -> changes original array unless copied first
+slice      -> non-mutating section of an array
+splice     -> mutates array (remove/insert/replace)
+flatMap    -> map then flatten one level
+Object.keys / values / entries -> object inspection
+Object.hasOwn -> own-property existence
+?.         -> optional chaining
+??         -> fallback only for null or undefined
+
+PRACTICE SCENARIOS FOR AN SDET INTERVIEW
+-----------------------------------------
+1. From 100 API users, find ID 42 and validate its status.
+2. From nested orders, locate the first item with SKU 'ABC'.
+3. Verify returned products are already sorted by price ascending.
+4. Verify no two users have the same ID or email.
+5. Find the second highest DISTINCT employee salary.
+6. Find all active QA employees in Pune.
+7. Group transactions by status and sum their amounts.
+8. Validate each user has a nonempty email.
+9. Compare expected and actual JSON while handling extra fields.
+10. Paginate large API arrays and verify page size and boundaries.
+
+END OF GUIDE

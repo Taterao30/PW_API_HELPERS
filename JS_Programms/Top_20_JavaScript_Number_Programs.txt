@@ -1,0 +1,192 @@
+TOP 20 JAVASCRIPT NUMBER PROGRAMS - SDET INTERVIEW PRACTICE
+=========================================================
+Run each program separately using Node.js. Each example contains input and expected output.
+
+1. REVERSE A NUMBER
+Input: 12345 | Expected: 54321
+let num = 12345;
+let reverse = 0;
+while (num > 0) {
+  reverse = reverse * 10 + (num % 10);
+  num = Math.floor(num / 10);
+}
+console.log(reverse); // 54321
+
+2. PALINDROME NUMBER
+Input: 12321 | Expected: Palindrome
+let num = 12321;
+let original = num;
+let reverse = 0;
+while (num > 0) {
+  reverse = reverse * 10 + num % 10;
+  num = Math.floor(num / 10);
+}
+console.log(original === reverse ? 'Palindrome' : 'Not Palindrome');
+
+3. PRIME NUMBER CHECK
+Input: 29 | Expected: Prime
+let num = 29;
+let isPrime = num > 1;
+for (let i = 2; i <= Math.sqrt(num); i++) {
+  if (num % i === 0) { isPrime = false; break; }
+}
+console.log(isPrime ? 'Prime' : 'Not Prime');
+
+4. PRIME NUMBERS FROM 1 TO 50
+Expected: 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47
+let primes = [];
+for (let num = 2; num <= 50; num++) {
+  let isPrime = true;
+  for (let i = 2; i <= Math.sqrt(num); i++) {
+    if (num % i === 0) { isPrime = false; break; }
+  }
+  if (isPrime) primes.push(num);
+}
+console.log(primes.join(' '));
+
+5. FACTORIAL OF A NUMBER
+Input: 5 | Expected: 120
+let num = 5;
+let factorial = 1;
+for (let i = 2; i <= num; i++) factorial *= i;
+console.log(factorial); // 120
+
+6. FIBONACCI SERIES
+Input: 8 terms | Expected: 0 1 1 2 3 5 8 13
+let n = 8;
+let a = 0, b = 1;
+let series = [];
+for (let i = 0; i < n; i++) {
+  series.push(a);
+  [a, b] = [b, a + b];
+}
+console.log(series.join(' '));
+
+7. ARMSTRONG NUMBER
+Input: 153 | Expected: Armstrong
+let num = 153;
+let digits = String(num).length;
+let sum = 0;
+let temp = num;
+while (temp > 0) {
+  let digit = temp % 10;
+  sum += digit ** digits;
+  temp = Math.floor(temp / 10);
+}
+console.log(sum === num ? 'Armstrong' : 'Not Armstrong');
+
+8. SUM OF DIGITS
+Input: 12345 | Expected: 15
+let num = 12345;
+let sum = 0;
+while (num > 0) {
+  sum += num % 10;
+  num = Math.floor(num / 10);
+}
+console.log(sum); // 15
+
+9. COUNT DIGITS
+Input: 102030 | Expected: 6
+let num = 102030;
+let count = String(Math.abs(num)).length;
+console.log(count); // 6
+
+10. EVEN OR ODD
+Input: 42 | Expected: Even
+let num = 42;
+console.log(num % 2 === 0 ? 'Even' : 'Odd');
+
+11. SWAP TWO NUMBERS WITHOUT THIRD VARIABLE
+Input: a=10, b=20 | Expected: a=20, b=10
+let a = 10, b = 20;
+[a, b] = [b, a];
+console.log(a, b); // 20 10
+
+12. LARGEST OF THREE NUMBERS
+Input: 14, 32, 27 | Expected: 32
+let a = 14, b = 32, c = 27;
+let largest = a;
+if (b > largest) largest = b;
+if (c > largest) largest = c;
+console.log(largest); // 32
+
+13. SECOND LARGEST DISTINCT NUMBER IN AN ARRAY
+Input: [12, 45, 45, 7, 31] | Expected: 31
+let nums = [12, 45, 45, 7, 31];
+let largest = -Infinity, second = -Infinity;
+for (let num of nums) {
+  if (num > largest) { second = largest; largest = num; }
+  else if (num < largest && num > second) second = num;
+}
+console.log(second === -Infinity ? 'Not found' : second); // 31
+
+14. GCD / HCF OF TWO NUMBERS
+Input: 24, 36 | Expected: 12
+let a = 24, b = 36;
+while (b !== 0) {
+  [a, b] = [b, a % b];
+}
+console.log(a); // 12
+
+15. LCM OF TWO NUMBERS
+Input: 12, 18 | Expected: 36
+let a = 12, b = 18;
+let x = a, y = b;
+while (y !== 0) [x, y] = [y, x % y];
+let lcm = (a * b) / x;
+console.log(lcm); // 36
+
+16. PERFECT NUMBER
+Input: 28 | Expected: Perfect Number
+let num = 28;
+let sum = 0;
+for (let i = 1; i <= num / 2; i++) {
+  if (num % i === 0) sum += i;
+}
+console.log(num > 1 && sum === num ? 'Perfect Number' : 'Not Perfect');
+
+17. POWER WITHOUT Math.pow() OR **
+Input: 2 to the power 5 | Expected: 32
+let base = 2, exponent = 5;
+let result = 1;
+for (let i = 0; i < exponent; i++) result *= base;
+console.log(result); // 32
+
+18. DECIMAL TO BINARY
+Input: 13 | Expected: 1101
+let num = 13;
+let binary = '';
+if (num === 0) binary = '0';
+while (num > 0) {
+  binary = (num % 2) + binary;
+  num = Math.floor(num / 2);
+}
+console.log(binary); // 1101
+
+19. BINARY TO DECIMAL
+Input: 1101 | Expected: 13
+let binary = '1101';
+let decimal = 0;
+for (let digit of binary) {
+  decimal = decimal * 2 + Number(digit);
+}
+console.log(decimal); // 13
+
+20. STRONG NUMBER (SUM OF FACTORIALS OF DIGITS)
+Input: 145 | Expected: Strong Number (1! + 4! + 5! = 145)
+let num = 145;
+let temp = num, sum = 0;
+do {
+  let digit = temp % 10;
+  let fact = 1;
+  for (let i = 2; i <= digit; i++) fact *= i;
+  sum += fact;
+  temp = Math.floor(temp / 10);
+} while (temp > 0);
+console.log(sum === num ? 'Strong Number' : 'Not Strong');
+
+INTERVIEW PRACTICE TIP
+----------------------
+First explain the logic using loops and conditions, then mention built-in alternatives.
+Try edge cases such as 0, 1, duplicates, negative inputs, and very large numbers.
+These examples focus on simple interview inputs; adapt validation for production code.

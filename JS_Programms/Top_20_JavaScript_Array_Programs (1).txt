@@ -1,0 +1,184 @@
+TOP 20 JAVASCRIPT ARRAY PROGRAMS - SDET / PLAYWRIGHT INTERVIEW
+=============================================================
+Each example can be run independently using Node.js.
+
+1. REVERSE AN ARRAY (WITHOUT reverse())
+Input: [1, 2, 3, 4, 5]
+Expected output: [5, 4, 3, 2, 1]
+let arr = [1, 2, 3, 4, 5];
+let result = [];
+for (let i = arr.length - 1; i >= 0; i--) result.push(arr[i]);
+console.log(result);
+
+2. FIND LARGEST ELEMENT
+Input: [10, 25, 7, 40, 15]
+Expected output: 40
+let arr = [10, 25, 7, 40, 15];
+let max = arr[0];
+for (let n of arr) if (n > max) max = n;
+console.log(max);
+
+3. FIND SMALLEST ELEMENT
+Input: [10, 25, 7, 40, 15]
+Expected output: 7
+let arr = [10, 25, 7, 40, 15];
+let min = arr[0];
+for (let n of arr) if (n < min) min = n;
+console.log(min);
+
+4. FIND SECOND-LARGEST DISTINCT ELEMENT
+Input: [10, 20, 20, 5, 30]
+Expected output: 20
+let arr = [10, 20, 20, 5, 30];
+let first = -Infinity, second = -Infinity;
+for (let n of arr) {
+  if (n > first) { second = first; first = n; }
+  else if (n < first && n > second) second = n;
+}
+console.log(second === -Infinity ? 'Not found' : second);
+
+5. SORT NUMBERS ASCENDING (WITHOUT sort())
+Input: [5, 2, 9, 1, 3]
+Expected output: [1, 2, 3, 5, 9]
+let arr = [5, 2, 9, 1, 3];
+for (let i = 0; i < arr.length; i++) {
+  for (let j = i + 1; j < arr.length; j++) {
+    if (arr[i] > arr[j]) [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+console.log(arr);
+
+6. REMOVE DUPLICATES USING indexOf()
+Input: [1, 2, 2, 3, 1, 4]
+Expected output: [1, 2, 3, 4]
+let arr = [1, 2, 2, 3, 1, 4];
+let unique = [];
+for (let n of arr) if (unique.indexOf(n) === -1) unique.push(n);
+console.log(unique);
+
+7. FIND DUPLICATE ELEMENTS USING Map
+Input: [1, 2, 3, 2, 4, 1, 2]
+Expected output: 1 2 and 2 3
+let arr = [1, 2, 3, 2, 4, 1, 2];
+let counts = new Map();
+for (let n of arr) counts.set(n, (counts.get(n) || 0) + 1);
+for (let [n, count] of counts) if (count > 1) console.log(n, count);
+
+8. COUNT FREQUENCY OF EACH ELEMENT
+Input: [4, 4, 2, 1, 2]
+Expected output: 4 2; 2 2; 1 1
+let arr = [4, 4, 2, 1, 2];
+let map = new Map();
+for (let n of arr) map.set(n, (map.get(n) || 0) + 1);
+for (let [n, count] of map) console.log(n, count);
+
+9. FIND SUM OF ARRAY ELEMENTS
+Input: [10, 20, 30]
+Expected output: 60
+let arr = [10, 20, 30];
+let sum = 0;
+for (let n of arr) sum += n;
+console.log(sum);
+
+10. FIND AVERAGE OF ARRAY ELEMENTS
+Input: [10, 20, 30, 40]
+Expected output: 25
+let arr = [10, 20, 30, 40];
+let sum = arr.reduce((total, n) => total + n, 0);
+console.log(arr.length ? sum / arr.length : 'Empty array');
+
+11. SEPARATE EVEN AND ODD NUMBERS
+Input: [1, 2, 3, 4, 5, 6]
+Expected output: Even: [2, 4, 6], Odd: [1, 3, 5]
+let arr = [1, 2, 3, 4, 5, 6];
+let even = [], odd = [];
+for (let n of arr) (n % 2 === 0 ? even : odd).push(n);
+console.log('Even:', even, 'Odd:', odd);
+
+12. MOVE ZEROS TO THE END (MAINTAIN ORDER)
+Input: [0, 1, 0, 3, 12]
+Expected output: [1, 3, 12, 0, 0]
+let arr = [0, 1, 0, 3, 12];
+let result = arr.filter(n => n !== 0);
+while (result.length < arr.length) result.push(0);
+console.log(result);
+
+13. MERGE TWO ARRAYS
+Input: [1, 2, 3] and [4, 5]
+Expected output: [1, 2, 3, 4, 5]
+let a = [1, 2, 3];
+let b = [4, 5];
+console.log([...a, ...b]);
+
+14. FIND COMMON ELEMENTS (INTERSECTION, DISTINCT)
+Input: [1, 2, 3, 4] and [3, 4, 5]
+Expected output: [3, 4]
+let a = [1, 2, 3, 4];
+let b = [3, 4, 5];
+let result = [...new Set(a)].filter(n => b.includes(n));
+console.log(result);
+
+15. FIND ELEMENTS PRESENT ONLY IN FIRST ARRAY
+Input: [1, 2, 3, 4] and [3, 4, 5]
+Expected output: [1, 2]
+let a = [1, 2, 3, 4];
+let b = [3, 4, 5];
+console.log(a.filter(n => !b.includes(n)));
+
+16. FIND MISSING NUMBER FROM 1 TO N
+Input: [1, 2, 4, 5] (N=5)
+Expected output: 3
+let arr = [1, 2, 4, 5];
+let n = 5;
+let expectedSum = n * (n + 1) / 2;
+let actualSum = arr.reduce((sum, x) => sum + x, 0);
+console.log(expectedSum - actualSum);
+// Assumes exactly one number is missing, with no duplicates.
+
+17. FIND PAIRS WITH TARGET SUM
+Input: [2, 7, 11, 15, 3, 6], target=9
+Expected output: [2, 7] and [3, 6]
+let arr = [2, 7, 11, 15, 3, 6];
+let target = 9;
+let seen = new Set();
+for (let n of arr) {
+  if (seen.has(target - n)) console.log([target - n, n]);
+  seen.add(n);
+}
+
+18. ROTATE ARRAY RIGHT BY K POSITIONS
+Input: [1, 2, 3, 4, 5], k=2
+Expected output: [4, 5, 1, 2, 3]
+let arr = [1, 2, 3, 4, 5];
+let k = 2;
+if (arr.length) {
+  k %= arr.length;
+  console.log([...arr.slice(-k), ...arr.slice(0, -k)]);
+} else console.log([]);
+
+19. FLATTEN A NESTED ARRAY
+Input: [1, [2, [3, 4]], 5]
+Expected output: [1, 2, 3, 4, 5]
+let arr = [1, [2, [3, 4]], 5];
+console.log(arr.flat(Infinity));
+
+20. FIND LONGEST CONSECUTIVE SEQUENCE
+Input: [100, 4, 200, 1, 3, 2]
+Expected output: 4 (sequence: 1, 2, 3, 4)
+let arr = [100, 4, 200, 1, 3, 2];
+let nums = new Set(arr);
+let longest = 0;
+for (let n of nums) {
+  if (!nums.has(n - 1)) {
+    let current = n, length = 1;
+    while (nums.has(current + 1)) { current++; length++; }
+    longest = Math.max(longest, length);
+  }
+}
+console.log(longest);
+
+INTERVIEW PRACTICE PRIORITY
+---------------------------
+Start with: reverse, second-largest, sorting, duplicates, frequency Map,
+move zeros, missing number, pair sum, array rotation, and flattening.
+Explain time complexity and edge cases (empty arrays, duplicates, negatives).
