@@ -1,0 +1,19 @@
+Q- Why did you choose Playwright over Selenium?
+Q- How does Playwright communicate with the browser, explain browser specific scenarios?
+Q-How Playwright works internally, explain the detailed internal working.
+Q - How do you distinguish between a genuinely flaky test and an application defect?
+Q-How do you debug Playwright failures?
+Q - How do you handle Shadow DOM in Playwright?
+Q-what is tight coupling and loose coupling
+Q-your token has expired and developer is on leave , how to handle this situation in payments validation
+Q-difference between plugin and dependency
+Q-how to run test cases parallelly using pom.xml file
+Q-diff between volatile and transient
+Q-how the playwright runs the test cases internally
+Q-if we have a bucket of values , how can we convert them into an map
+Q-diff between hashmap and linkedHashmap and treemap
+Q-diff between rebase revert and revoke
+Q- why we need ConcurrentHashmap?
+Q. If there is a hotfix, how do you handle it — do you add it to your test cases? 
+Q- What is the expected pass percentage for automated test cases?
+Q-How do you handle a flaky iframe, e.g. a payment gateway widget?
