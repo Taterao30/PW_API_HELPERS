@@ -1,0 +1,170 @@
+COLLINSON SDET INTERVIEW PREPARATION
+Interview date: 13 October 2026
+Role: SDET | Location: Mumbai - Hybrid
+Based on: Collinson SDET Job Description (3 pages)
+
+NOTE: The questions below are practice questions inferred from the job description, not confirmed questions from Collinson interviews.
+
+============================================================
+1. PLAYWRIGHT + TYPESCRIPT (HIGH PRIORITY)
+============================================================
+1. Explain your Playwright automation framework architecture.
+2. How do you create a Playwright framework from scratch using TypeScript?
+3. What is the difference between page.locator() and getByRole()?
+4. Explain getByText(), getByLabel(), getByPlaceholder(), getByTitle(), getByTestId() and getByAltText().
+5. How does Playwright auto-waiting work?
+6. What is the difference between waitForSelector() and locator.waitFor()?
+7. How do you handle iframes in Playwright?
+8. How do you handle multiple windows and tabs?
+9. How do you upload and download files?
+10. What are fixtures, and how have you used them?
+11. How do you implement the Page Object Model in Playwright?
+12. How do you handle flaky tests and retries?
+13. How do you execute tests in parallel and use sharding?
+14. What is the difference between workers and fullyParallel?
+15. How do you use test tags for smoke, sanity and regression?
+16. How do you use page.route() to mock API responses?
+17. How do you validate network requests and responses?
+18. How do you handle environment-specific configurations?
+19. How do you debug Playwright tests that fail only in CI/CD?
+20. How do you generate HTML and Allure reports?
+
+============================================================
+2. API AUTOMATION, CONTRACT TESTING AND INTEGRATION
+============================================================
+21. How do you design an API automation framework from scratch?
+22. How do you test APIs using Playwright APIRequestContext?
+23. How do you write GET, POST, PUT, PATCH and DELETE requests?
+24. How do you validate status codes, headers and response body fields?
+25. How do you validate complex and nested JSON responses?
+26. What is JSON schema validation, and how do you implement it?
+27. What is API contract testing, and why is it important?
+28. What is the difference between API schema testing and contract testing?
+29. How do you perform POST -> GET -> PUT -> DELETE API chaining?
+30. How do you test Basic Auth, Bearer tokens and OAuth 2.0?
+31. How do you validate missing, expired or invalid tokens?
+32. How do you pass path and query parameters?
+33. How do you create dynamic request payloads and unique test data?
+34. How do you test negative API scenarios and boundary values?
+35. How do you test an API if its downstream service is unavailable?
+36. How do you create reusable API helpers and fixtures?
+37. What is the difference between mocks, stubs and simulators?
+38. How do you validate response times and error handling?
+39. How do you test a microservice integration workflow?
+40. How do you distinguish unit, integration, contract and end-to-end API tests?
+
+============================================================
+3. AUTOMATION FRAMEWORK DESIGN AND CI/CD
+============================================================
+41. Explain your automation framework folder structure.
+42. How would you design a maintainable test framework from scratch?
+43. How do you make utilities reusable and avoid duplicate code?
+44. How do you manage test data for different environments?
+45. How do you manage secrets and credentials in CI/CD?
+46. How do you integrate automation with Jenkins or GitHub Actions?
+47. When should smoke and regression tests run in a pipeline?
+48. How do you organize a test suite for fast feedback?
+49. How do you reduce execution time for 1,000 automated tests?
+50. How do you decide which tests belong in smoke, integration and E2E suites?
+51. What do you do when tests pass locally but fail in the pipeline?
+52. How do you manage test reports, logs, screenshots and traces?
+53. How do you review and maintain the health of a regression suite?
+54. How do you balance coverage, execution speed and reliability?
+55. What coding and review standards do you follow for test automation?
+
+============================================================
+4. TYPESCRIPT / JAVASCRIPT CODING PRACTICE
+============================================================
+56. Write a program to find the first non-repeating character in a string.
+57. Write a program to find the second non-repeating character.
+58. Write a program to find duplicate characters and their counts.
+59. Write a program to find the most frequent character in a string.
+60. Write a program to reverse a string without using reverse().
+61. Write a program to check whether a string is a palindrome.
+62. Write a program to find the second-largest number in an array.
+63. Write a program to remove duplicate array elements without using Set.
+64. Write a program to move zeros to the end of an array.
+65. Write a program to count the occurrences of each word.
+66. How do you find a matching object in a nested JSON array?
+67. Explain let, const and var.
+68. What is the difference between == and ===?
+69. Explain map(), filter(), find(), reduce() and forEach().
+70. Explain async/await, Promise.all() and try/catch.
+71. What is the difference between a Promise and a callback?
+72. Explain interfaces, types, classes and access modifiers in TypeScript.
+73. What is inheritance and encapsulation? Give framework examples.
+74. What are generics in TypeScript, and when would you use them?
+75. How would you write a reusable typed API helper method?
+
+============================================================
+5. SDET STRATEGY AND REAL-WORLD SCENARIOS
+============================================================
+76. How do you create an end-to-end test strategy for a new product?
+77. How do you embed quality early in the SDLC (shift-left testing)?
+78. How do you define quality standards and release criteria?
+79. How do you collaborate with engineers, product managers and delivery leads?
+80. How do you prioritize defects based on business impact and release scope?
+81. What do you do if 20 of 100 automated tests fail?
+82. How do you investigate an intermittent production defect?
+83. How do you validate a defect fix and prevent regression?
+84. How do you combine exploratory testing with automation?
+85. What is your approach to risk-based testing?
+86. How would you test a distributed system with multiple services?
+87. How would you test retries, timeouts and partial service outages?
+88. How do you decide whether an application is ready for release?
+89. How do you improve the reliability and maintainability of an existing framework?
+90. Tell me about a testing process improvement that you contributed to.
+
+============================================================
+6. AI-FIRST TESTING, EVENT-DRIVEN SYSTEMS AND PERFORMANCE
+============================================================
+91. How have you used AI assistants in day-to-day test design or automation?
+92. How do you verify that AI-generated tests are correct and useful?
+93. How could AI help analyze failures and identify missing edge cases?
+94. What are Kafka topics, producers and consumers at a high level?
+95. How would you test an event-driven workflow using a queue or stream?
+96. How do you test duplicate events, retries and eventual consistency?
+97. What are AWS EventBridge and Step Functions used for at a high level?
+98. How do you plan API load testing using JMeter or k6?
+99. What metrics matter in a performance test (latency, throughput, errors)?
+100. How do you test system resilience under increasing load?
+
+============================================================
+7. COLLINSON DOMAIN AND EXAMPLE SYSTEM DESIGN
+============================================================
+101. What do you know about Collinson and its products, including Priority Pass?
+102. How might loyalty, travel benefits and financial-services systems interact?
+103. How would you test customer eligibility for a membership benefit?
+104. How would you test benefit activation across multiple APIs or services?
+105. How would you validate that an event triggers the right entitlement update?
+106. What negative and security scenarios would you test for benefit redemption?
+107. How would you avoid duplicate redemptions when requests are repeated?
+108. How would you test a customer journey end to end across UI and APIs?
+
+============================================================
+8. PROJECT EXPERIENCE AND BEHAVIOURAL QUESTIONS
+============================================================
+109. Tell me about yourself and your SDET experience.
+110. Explain a project where you designed or extended an automation framework.
+111. What was your biggest automation challenge, and how did you solve it?
+112. Explain a high-priority defect you investigated and resolved.
+113. Describe a disagreement with a developer and how you handled it.
+114. How do you contribute to sprint planning, refinement and retrospectives?
+115. How do you review another engineer's automated test code?
+116. Why do you want to join Collinson?
+117. Why are you interested in this SDET role?
+118. What would you improve in an unfamiliar automation project in your first month?
+
+============================================================
+9. PRACTICAL PREPARATION PLAN
+============================================================
+Priority 1: Questions 1-20 and 21-40 (Playwright, TypeScript, API)
+Priority 2: Questions 41-75 (framework, CI/CD, coding)
+Priority 3: Questions 76-100 (test strategy, microservices, AI, performance)
+Priority 4: Questions 101-118 (domain knowledge, your actual experience)
+
+Prepare clear explanations of projects YOU have actually worked on.
+For technologies you have not used, distinguish conceptual knowledge from hands-on experience.
+Practice writing coding solutions without copying from notes.
+
+GOOD LUCK WITH YOUR INTERVIEW!

@@ -1,0 +1,3154 @@
+﻿PLAYWRIGHT + TYPESCRIPT - COMPLETE CODE STUDY NOTES
+==============================================================================
+Source: Playwright_Sessions_Code_2026 (5).zip
+Total source files: 53
+
+IMPORTANT:
+- All 53 original source files are included.
+- Code is preserved; only unnecessary trailing whitespace and excessive blank lines are cleaned.
+- Some examples may need a running website, dependencies, or credentials to execute.
+- Copy the code between START CODE and END CODE when practicing.
+
+TABLE OF CONTENTS
+==============================================================================
+
+PROJECT CONFIGURATION
+------------------------------------------------------------------------------
+01. package.json
+02. playwright.config.ts
+03. tsconfig.json
+
+TYPESCRIPT AND SUPPORTING SOURCE CODE
+------------------------------------------------------------------------------
+04. src/authstate.ts
+05. src/datatypes.ts
+06. src/index.ts
+07. src/launch.ts
+08. src/objecttypes.ts
+09. src/optionalparam.ts
+10. src/test.ts
+
+PLAYWRIGHT TEST EXAMPLES
+------------------------------------------------------------------------------
+11. tests/backandforward.spec.ts
+12. tests/browser.spec.ts
+13. tests/chatwindow.spec.ts
+14. tests/datatestid.spec.ts
+15. tests/example.spec.ts
+16. tests/expect.spec.ts
+17. tests/fetchtextboxtext.spec.ts
+18. tests/filedownload.spec.ts
+19. tests/fileupload.spec.ts
+20. tests/fillwithdelay.spec.ts
+21. tests/frame.spec.ts
+22. tests/getattribute.spec.ts
+23. tests/getByMethods.spec.ts
+24. tests/getByText.spec.ts
+25. tests/getbyTitle.spec.ts
+26. tests/googlesearch.spec.ts
+27. tests/highlightElement.spec.ts
+28. tests/hooks.spec.ts
+29. tests/jsalert.spec.ts
+30. tests/locatorchain.spec.ts
+31. tests/locatorxpathcss.spec.ts
+32. tests/mousekey.spec.ts
+33. tests/mouserhoveicici.spec.ts
+34. tests/multipleelements.spec.ts
+35. tests/multiplewindowhandle.spec.ts
+36. tests/multiuser.spec.ts
+37. tests/nonselectdropdown.spec.ts
+38. tests/pageloadingwait.spec.ts
+39. tests/psuedoele.spec.ts
+40. tests/radiocheckbox.spec.ts
+41. tests/randompopup.spec.ts
+42. tests/registerlocator.spec.ts
+43. tests/retrycheck.spec.ts
+44. tests/selectdropdown.spec.ts
+45. tests/shadowdom.spec.ts
+46. tests/storagestate.spec.ts
+47. tests/svgelement.spec.ts
+48. tests/testgrouping.spec.ts
+49. tests/testoptions.spec.ts
+50. tests/waits.spec.ts
+51. tests/webtablepagination.spec.ts
+52. tests/windowsize.spec.ts
+53. tests/workers.spec.ts
+
+==============================================================================
+EXAMPLE 01 OF 53  |  PROJECT CONFIGURATION
+FILE: package.json
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+{
+  "name": "2026aprilpwsessions",
+  "version": "1.0.0",
+  "description": "this is my PW practice project",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "Naveen Khunteta",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.0"
+  }
+}
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 02 OF 53  |  PROJECT CONFIGURATION
+FILE: playwright.config.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  /* Run tests in files in parallel */
+  fullyParallel: true,
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
+  retries: process.env.CI ? 2 : 0,
+  /* Opt out of parallel tests on CI. */
+  workers: process.env.CI ? 1 : undefined,
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  reporter: 'html',
+  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  use: {
+    trace: 'on-first-retry',
+    headless: false
+  },
+
+  /* Configure projects for major browsers */
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
+
+    /* Test against mobile viewports. */
+    // {
+    //   name: 'Mobile Chrome',
+    //   use: { ...devices['Pixel 5'] },
+    // },
+    // {
+    //   name: 'Mobile Safari',
+    //   use: { ...devices['iPhone 12'] },
+    // },
+
+    /* Test against branded browsers. */
+    // {
+    //   name: 'Microsoft Edge',
+    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    // },
+    // {
+    //   name: 'Google Chrome',
+    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    // },
+  ],
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 03 OF 53  |  PROJECT CONFIGURATION
+FILE: tsconfig.json
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "sourceMap": true,
+    "declaration": false,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "tests/**/*.ts",
+    "pages/**/*.ts",
+    "fixtures/**/*.ts",
+    "utils/**/*.ts",
+    "playwright.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "playwright-report",
+    "test-results"
+  ]
+}
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 04 OF 53  |  TYPESCRIPT AND SUPPORTING SOURCE CODE
+FILE: src/authstate.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//IIFE:
+
+import { chromium, expect } from "playwright/test"
+
+(async () => {
+    let browser = await chromium.launch({ headless: false, channel: 'chrome' });
+    let page = await browser.newPage();
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+    await page.locator('#input-email').fill('sasmita.brown419@test.com');
+    await page.locator('#input-password').fill('pw123');
+    await page.locator("//input[@value='Login']").click();
+
+    expect(await page.title()).toBe('My Account'); //assertion
+
+    await page.context().storageState({ path: 'opencartstate.json' });
+
+})();
+
+//tsc ---> authstate.js
+//node authstate.js
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 05 OF 53  |  TYPESCRIPT AND SUPPORTING SOURCE CODE
+FILE: src/datatypes.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//data types:
+
+//1. primitive data types:
+let name: string = 'Tom';
+let empName = 'Naveen';
+console.log(typeof empName);
+
+let age: number = 30;
+console.log(age);
+
+let isActive: boolean = true;
+console.log(isActive);
+
+let noValue: null = null;
+console.log(noValue);
+console.log(typeof noValue);
+
+let notSet: undefined = undefined;
+console.log(notSet);
+console.log(typeof undefined);
+
+let username: string;
+username = 'naveenautomation';
+console.log(username);
+
+let bigNum: bigint = 909098989899999n;
+console.log(bigNum);
+
+let data: any = 'hello world';
+console.log(data, typeof data);
+console.log(data.toUpperCase());
+
+data = 300;
+console.log(data, typeof data);
+
+let value: unknown = 'hello';
+console.log(value, typeof value);
+//console.log(value.toUpperCase()); //CT error
+
+if (typeof value === 'string') { //type check
+    console.log(value.toUpperCase());
+}
+
+//void: return type of function: does not return any value.
+function clickOnElement(element: string): void {
+    console.log('click on :', element);
+}
+
+clickOnElement('loginButton');
+
+//never: function never returns (throws the error or infinite loop)
+// function throwSomeError(messg: string): never {
+//     throw new Error(messg);
+// }
+
+// throwSomeError('element not found...');
+
+// function pageLoading(): never {
+//     while (true) {
+//         console.log('hello word');
+//     }
+
+// }
+
+// pageLoading();
+// console.log('bye');
+
+//Array: dynamic
+let score: number[] = [100, 20, 40];
+console.log(score);
+
+let browsers: string[] = ['chrome', 'firefox', 'edge'];
+console.log(browsers.length);
+
+let empIds: (string | number)[] = ['rest101', 100];
+
+let names: string[] = ['tom', 'shilpa', 'manish'];
+let empNames: Array<string | number> = ['tom', 'shilpa', 'manish', 101];
+
+console.log(typeof score);
+
+//tuple: static array: fixed length, fixed type per position:
+let user: [string, number, boolean] = ['Peter', 30, true];
+console.log(user);
+
+//objects:
+let userObj: { name: string | number, age: number, salary: number, active: boolean } =
+{
+    age: 35,
+    salary: 12.33,
+    active: true,
+    name: 'shilpa'
+
+}
+
+console.log(userObj);
+
+//enums: collection of constant values:
+
+enum Status {
+    Open, //0
+    ReOpen, //1
+    New, //2
+    Closed,//3
+    Assigned,//4
+    Fixed//5
+}
+
+console.log(Status);
+console.log(Status.Open);//0
+console.log(Status.Fixed);//5
+
+enum Browsers {
+    ch = "chrome",
+    ff = "firefox",
+    eg = "edge",
+    sf = "safari"
+}
+
+console.log(Browsers);
+console.log(Browsers.ch);
+console.log(Browsers);
+
+enum Roles {
+    Admin = "Admin",
+    Tester = "Tester",
+    Dev = "Developer"
+}
+
+console.log(Roles.Admin);
+
+//union type:
+let userID: string | number = 'test101';
+userID = 1000;
+
+//Literal Types: exact values only
+let httpStatusCode: 200 | 400 | 500;
+
+httpStatusCode = 200;
+console.log(httpStatusCode);
+
+let direction: "left" | "right" | "up" | "down";
+
+//functions:
+function getNumber(): number {
+    return 100;
+}
+
+function getTrainerName(): string | number {
+    return 'Tom';
+}
+
+function getNumbers(): (string | number)[] {
+    return [100, 200, 300];
+}
+
+
+//arrow:
+let addNum = (x: number, y: number): number => x + y;
+let r1 = addNum(100, 200);
+console.log(r1);
+
+//promises:
+function getUserData(): Promise<number | string> {
+    return new Promise((resolve, reject) => {
+        let flag: boolean = true;
+        if (flag) {
+            resolve(100);
+        }
+        else {
+            reject('400 error');
+        }
+    });
+}
+
+let res = await getUserData();
+console.log(res);
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 06 OF 53  |  TYPESCRIPT AND SUPPORTING SOURCE CODE
+FILE: src/index.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+let x: number = 10;
+
+let name: string = 'naveen';
+
+let status: boolean = true;
+
+console.log(typeof name);
+console.log(typeof status);
+
+
+//name: addition
+//params: 2 (x: number, y: number)
+//return type: number
+
+function addition(x: number, y: number): number {
+    return x + y;
+}
+
+console.log(addition(100, 200));
+
+
+function getTrainerName(): string {
+    return 'Naveen';
+}
+
+getTrainerName();
+
+function printData(): void {
+    console.log('print user data');
+}
+
+printData();
+
+function getNumbers(): number[] {
+    return [10, 20, 30];
+}
+
+let sub = (a: number, b: number): number => a - b;
+
+let t1: number = sub(100, 50);
+console.log(t1);
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 07 OF 53  |  TYPESCRIPT AND SUPPORTING SOURCE CODE
+FILE: src/launch.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, chromium, firefox, Page, webkit } from "playwright/test";
+
+//browser ---> page ---> url ---> locator --- close
+// (async () => {
+
+//     //open browser:
+//     let browser: Browser = await chromium.launch({ headless: false, channel: 'chrome' });
+//     let page: Page = await browser.newPage();
+//     await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+//     let title = await page.title();
+//     console.log('page title: ', title);
+//     console.log(page.url());
+//     browser.close();
+
+// })();
+
+
+type BrowserName = 'chrome' | 'edge' | 'firefox' | 'webkit';
+
+async function launchBrowser(browserName: BrowserName) {
+    console.log('browser name: ', browserName);
+
+    switch (browserName.trim().toLowerCase()) {
+        case 'chrome':
+            return await chromium.launch({ headless: false, channel: 'chrome' });
+        case 'edge':
+            return await chromium.launch({ headless: false, channel: 'msedge' });
+        case 'firefox':
+            return await firefox.launch({ headless: false });
+        case 'webkit':
+            return await webkit.launch({ headless: false });
+        default:
+            console.log('invalid browser....', browserName);
+            throw new Error(`invalid browser:, ${browserName}`);
+    }
+}
+
+//calling this :
+let browser: Browser = await launchBrowser('chrome');
+let page: Page = await browser.newPage();
+await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+let title = await page.title();
+console.log('page title: ', title);
+console.log(page.url());
+browser.close();
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 08 OF 53  |  TYPESCRIPT AND SUPPORTING SOURCE CODE
+FILE: src/objecttypes.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//contract/schema for the user
+type userType = {
+    name: string,
+    age: number,
+    salary?: number,
+    isActive: boolean,
+    role?: string,
+};
+
+
+let user: userType = {
+    name: 'Tom',
+    age: 30,
+    salary: 40,
+    isActive: true,
+    role: 'admin',
+}
+
+let myUser: userType = {
+    name: 'peter',
+    age: 34,
+    salary: 43,
+    isActive: false,
+    role: 'customer'
+}
+
+let newUser: userType = {
+    name: 'Ravi',
+    age: 30,
+    isActive: true,
+    salary: 10
+}
+
+console.log(user);
+console.log(typeof user);
+console.log(myUser);
+
+//interface: used to create/define the schema:
+
+interface userSchema {
+    name: string,
+    age?: number,
+    isActive?: boolean,
+}
+
+let u1: userSchema = {
+    name: 'Naveen',
+    age: 20,
+    isActive: true
+}
+
+
+//
+
+interface Comp {
+    compName: string
+}
+
+interface Employee {
+    name: string,
+    age: number,
+    salary: number
+}
+
+interface Dept extends Employee, Comp {
+    deptName: string,
+    head?: string
+}
+
+let emp: Dept = {
+    name: 'tom',
+    age: 30,
+    salary: 12.33,
+    deptName: 'HR',
+    head: 'Peter',
+    compName: 'IBM'
+}
+
+//
+interface Car {
+    brand: string
+}
+
+interface Car {
+    model: string
+}
+
+let myCar: Car = {
+    brand: 'BMW',
+    model: 'x5'
+}
+
+console.log(myCar.brand, myCar.model);
+
+//
+
+type Person = {
+    name: string
+};
+
+type Company = Person & {
+    company: string,
+    count: number
+}
+
+let myEmp: Company = {
+    name: 'Tom',
+    company: 'google',
+    count: 100
+}
+
+//
+
+type Status = "Pending" | "Out of delivery" | "Delivered";
+let orderStatus: Status = "Pending";
+
+//type with primitive data:
+type userID = string | number;
+type Age = number;
+
+let id: userID = 'pop001';
+let id1: userID = 9001;
+let age: Age = 20;
+
+//type with tuples:
+type Point = [number, number, string];
+let p: Point = [10.33, 43.44, 'LA'];
+
+//Real time example: in test automation:
+
+//interface for the test config
+interface TestConfig {
+    testName: string,
+    browser: "chrome" | "firefox" | "webkit",
+    headless: boolean,
+    retries?: number
+}
+
+//type for the status:
+type TestStatus = "passed" | "failed" | "skipped";
+
+//interface for the Test Result:
+interface TestResult extends TestConfig {
+    status: TestStatus,
+    duration: number
+}
+
+let result: TestResult = {
+    status: "passed",
+    duration: 10,
+    testName: "Login Test",
+    browser: "chrome",
+    headless: false,
+    retries: 3
+}
+
+console.log(result);
+let resultJson = JSON.stringify(result, null, 2);
+console.log(resultJson);
+
+//JS --> JSON --> insert SQL ---> DB(schema)
+//Java (POJO classes) --> JSON
+
+
+interface Browser {
+    browserName: string,
+    version: number,
+    coding(langName: string): void,
+    add: (a: number, b: number) => number;
+}
+
+let chrome: Browser = {
+    browserName: 'chrome',
+    version: 134,
+    coding(langName: string) {
+        console.log(`${this.browserName} working with ${langName}...`);
+    },
+    add: function (a: number, b: number): number {
+        return a + b;
+    }
+}
+
+chrome.coding('Javascript');
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 09 OF 53  |  TYPESCRIPT AND SUPPORTING SOURCE CODE
+FILE: src/optionalparam.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//optional param:
+//not mandatory to pass the value for the optonal param
+//optional param should be written at the last after the required params
+//it should be written with ?
+
+function getBilling(foodBill: number, tax?: number, vat: number=90): void {
+
+    if (tax && vat) {
+        console.log(foodBill + tax + vat);
+    }
+    else if (tax) {
+        console.log(foodBill + tax);
+    }
+    else {
+        console.log(foodBill);
+    }
+
+}
+
+getBilling(1000, 20, 5);
+getBilling(1000, 500);
+getBilling(1000);
+getBilling(100, 0, 5);
+
+//can we have optional param with default value?
+
+function calcPrice(amount: number, discount: number = 0, vat: number = 50): number {
+    return amount - (amount * discount) / 100 + vat;
+}
+
+console.log(calcPrice(100, 5));
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 10 OF 53  |  TYPESCRIPT AND SUPPORTING SOURCE CODE
+FILE: src/test.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+let name: string = 'Tom';
+let age: number = 20;
+console.log(name, age);
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 11 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/backandforward.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('back and forward button simulation test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home');
+    console.log(await page.title());
+
+    await page.waitForTimeout(2000);
+
+    await page.goto('https://google.com');
+    console.log(await page.title());
+    await page.waitForTimeout(2000);
+
+
+    await page.goBack();
+    console.log(await page.title());
+    await page.waitForTimeout(2000);
+
+    await page.goForward();
+    console.log(await page.title());
+    await page.waitForTimeout(2000);
+
+
+    await page.goBack();
+    console.log(await page.title());
+    await page.waitForTimeout(2000);
+
+    await page.reload();//will refresh the page
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 12 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/browser.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('title test', async ({ page }) => {
+    await page.goto('https://www.google.com');
+    let title = await page.title();
+    console.log('title is:', title);
+    let appUrl = page.url();
+    console.log('app url:', appUrl);
+});
+
+test.skip('multiple browser test', async () => {
+
+    //let browser: Browser = await chromium.launch({ headless: false });//CFT
+    // let browser: Browser = await chromium.launch({ headless: false, channel: 'chrome' });
+    // let browser: Browser = await chromium.launch({ headless: false, channel: 'msedge' });
+
+    //let browser: Browser = await chromium.launch({ headless: false, executablePath: '/Applications/Opera.app/Contents/MacOS/Opera' });
+    // let browser: Browser = await chromium.launch({ headless: false, executablePath: '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser' });
+
+
+    let browser: Browser = await firefox.launch({ headless: false });
+
+    // let browser: Browser = await webkit.launch({ headless: false });
+    let page: Page = await browser.newPage();
+    await page.goto('https://www.google.com');
+    let title = await page.title();
+    console.log('title is:', title);
+    let appUrl = page.url();
+    console.log('app url:', appUrl);
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 13 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/chatwindow.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, BrowserContext, Page } from '@playwright/test';
+
+test('chat window users test', async ({ browser }) => {
+    let ctx1: BrowserContext = await browser.newContext();//window1
+    let ctx2: BrowserContext = await browser.newContext();//window2
+
+    let page1: Page = await ctx1.newPage();
+    let page2: Page = await ctx2.newPage();
+
+    await page1.goto('http://localhost:3000/');
+    await page2.goto('http://localhost:3000/');
+
+    await page1.locator('#usernameInput').fill('Naveen');
+    await page1.locator('#joinBtn').click();
+    await page1.locator('#messageInput').fill('Hi Deepti, How are you doing today??');
+    await page1.locator('#sendBtn').click();
+
+
+    await page2.locator('#usernameInput').fill('Deepti');
+    await page2.locator('#joinBtn').click();
+    await page2.locator('#messageInput').fill('Hi Naveen, Im good, do we have session today??');
+    await page2.locator('#sendBtn').click();
+
+
+    await page1.locator('#messageInput').fill('yes we have session at sametime');
+    await page1.locator('#sendBtn').click();
+
+    await page2.locator('#messageInput').fill('ok will join the session today');
+    await page2.locator('#sendBtn').click();
+
+    await page1.pause();
+    await page2.pause();
+
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 14 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/datatestid.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, selectors, test, webkit } from '@playwright/test';
+
+test('data test id locator test', async ({ page }) => {
+    // await page.goto('https://naveenautomationlabs.com/opencart/ui/data-testid-page.html');
+
+    // //data-testid="username-input"
+    // await page.getByTestId('username-input').fill('naveen automation labs');
+    // await page.getByTestId('email-input').fill('test@gmail.com');
+
+
+    //data-test-id="EMAIL"
+
+    selectors.setTestIdAttribute('id');
+    await page.goto('https://app.hubspot.com/signup-hubspot/crm?step=landing_page');
+    await page.getByTestId('FormControl1').fill('naven@hub.com');
+
+    await page.pause();
+
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 15 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/example.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect } from '@playwright/test';
+
+test('has title', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+  await expect(page).toHaveTitle(/Playwright/);
+});
+
+
+test('get started link', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+  await page.getByRole('link', { name: 'Get started' }).click();
+  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 16 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/expect.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//assertions -- expect() method
+//soft and hard assertions
+//in-built assertions
+//default timeout: 5 secs
+
+//exp vs actual result: checkpoint, validation point
+
+
+import { Page, chromium, expect, firefox, selectors, test, webkit } from '@playwright/test';
+
+test('expect assertion test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+
+    //expect(page.getByText('First Name must be between 1 and 32 characters!', { exact: true })).toBeVisible();
+
+    expect(100).toBe(100);
+
+    expect(page.url()).toContain('account/register');
+
+    let header = page.getByRole('heading', { name: 'Register Account', level: 1 });
+    await expect(header).toBeVisible();
+
+    //Register Account
+    await expect.soft(header).toHaveText('Register Account');
+
+    await expect(page.locator('#column-right a.list-group-item')).toHaveCount(13);
+
+    await page.getByRole('textbox', { name: '* First Name' }).fill('Naveen Automation Labs');
+    await expect(page.getByRole('textbox', { name: '* First Name' }), 'text box should have NAL value').toHaveValue('Naveen Automation Labs');
+
+
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/data-testid-page.html');
+
+    await expect(page.getByTestId('country-select').locator('option')).toHaveCount(6);
+
+
+    await page.getByTestId('country-select').selectOption('India');
+    await expect(page.getByTestId('country-select')).toHaveValue('in');
+
+    console.log('....END....');
+
+});
+
+
+test('expect assertion for differnet elements test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/elementstate.html');
+
+    await expect(page.getByRole('button', { name: 'Create Account' })).toBeDisabled({ timeout: 10000 }); //10 secs
+
+    await expect(page.getByRole('textbox', { name: 'First Name' })).toBeEmpty();//5 secs
+    await expect(page.getByRole('textbox', { name: 'Email' })).toBeEmpty();//5 secs
+
+    await expect(page.getByRole('textbox', { name: 'First Name' })).toBeEditable();
+    await expect(page.getByRole('textbox', { name: 'Email' })).toBeEditable();
+
+    await expect(page.getByRole('textbox', { name: 'Username (read-only, auto-generated)' })).not.toBeEditable();
+
+    await page.getByRole('checkbox', { name: 'I agree to the Terms of Service and Privacy Policy' }).check();
+    await expect(page.getByRole('checkbox', { name: 'I agree to the Terms of Service and Privacy Policy' })).toBeChecked();
+
+    await expect(page.getByRole('button', { name: 'Create Account' })).toBeEnabled();
+
+    await page.getByRole('checkbox', { name: 'I agree to the Terms of Service and Privacy Policy' }).uncheck();
+    await expect(page.getByRole('button', { name: 'Create Account' })).toBeDisabled();
+
+    //attributes:
+    await expect(page.getByRole('textbox', { name: 'First Name' })).toHaveAttribute('type', 'text');
+    await expect(page.getByRole('textbox', { name: 'First Name' })).toHaveAttribute('placeholder', 'Enter first name');
+
+    await expect(page.getByRole('textbox', { name: 'Username (read-only, auto-generated)' })).toHaveAttribute('readonly', '');
+
+    await expect(page.getByRole('textbox', { name: 'First Name' })).toHaveId('firstname', { timeout: 10000 });
+
+    console.log('....END....');
+
+});
+
+
+test('expect time out test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    //Register Account
+    //default timeout: 5 secs or 5000 ms
+    let header = page.getByRole('heading', { name: 'Register Account', level: 1 });
+    await expect.soft(header).toHaveText('Register Account123');
+
+    console.log('....END....');
+
+});
+
+
+//AAA pattern: Arrange Act Assert
+//test case -> only 1 hard assertion
+//test case --> multiple soft assertions
+
+//register page test: steps ---- asertions:
+
+//1. check the logo -- tc1
+//2. check the url -- tc2
+//3. check the title --tc3
+//4. check the footer --tc4
+//5. check the right panel links --tc5
+//6. check the fn is visible --tc6
+
+//Register Page Test: hard
+//1. check the logo -- pass
+//2. check the url -- failed
+//3. check the title --
+//4. check the footer --
+//5. check the right panel links --
+//6. check the fn is visible --
+
+//Register Page Test: soft
+//1. check the logo -- pass
+//2. check the url -- failed
+//3. check the title -- pass
+//4. check the footer -- failed
+//5. check the right panel links -- pass
+//6. check the fn is visible -- pass
+//Report: Pass: 4, failed: 2
+
+//soft --> with the same functionality checkpoints:
+//tc: rgister form elements visibilty check:
+//1 to 6 : soft assertions
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 17 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/fetchtextboxtext.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, selectors, test, webkit } from '@playwright/test';
+
+test('get the text of textbox value test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    await page.getByRole('textbox', { name: 'First Name' }).fill('Naveen Automation Labs');
+    let firstNameValue = await page.getByRole('textbox', { name: 'First Name' }).inputValue();
+    console.log(firstNameValue);
+
+    await page.pause();
+
+    //password: 4-8 chars
+
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 18 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/filedownload.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+import fs from 'fs';
+
+test('file download test', async ({ page }) => {
+
+    await page.goto('https://the-internet.herokuapp.com/download');
+
+    let [download] = await Promise.all([
+        page.waitForEvent('download'),
+        page.getByRole('link', { name: 'resume.txt' }).click()
+    ]);
+
+
+    //make sure that there is no failure during downloading process....
+    expect(await download.failure()).toBeNull();
+
+    //get the file name:
+    console.log('file name: ', download.suggestedFilename());
+
+    //save to a specific path:
+    let filePath = './downloads/' + download.suggestedFilename(); //downloads/resume.txt
+    await download.saveAs(filePath);
+
+    //verify the file exists:
+    expect(fs.existsSync(filePath)).toBeTruthy();
+
+    //verify the file size > 0
+    let fileSize = fs.statSync(filePath).size;
+    console.log('file size in bytes: ', fileSize);
+    expect(fileSize).toBeGreaterThan(0);
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 19 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/fileupload.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('single file upload test', async ({ page }) => {
+
+    //it should have type="file" attribute
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/file-upload.html');
+    await page.locator('#single-file').setInputFiles('/Users/naveenautomationlabs/Downloads/normalfiles/v8-architecture.html');
+
+    await page.waitForTimeout(2000);
+
+    await page.locator('#single-file').setInputFiles([]); //remove the file
+
+    await page.pause();
+
+});
+
+test('multiple files upload test', async ({ page }) => {
+
+    //it should have type="file" and multiple attribute
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/file-upload.html');
+
+    await page.locator('#multi-file').setInputFiles([
+        '/Users/naveenautomationlabs/Downloads/normalfiles/v8-architecture.html',
+        '/Users/naveenautomationlabs/Downloads/normalfiles/WhatisJavaScript.pdf',
+        '/Users/naveenautomationlabs/Downloads/normalfiles/locators.md'
+    ]);
+
+    await page.waitForTimeout(5000);
+
+    await page.locator('#multi-file').setInputFiles([]);
+
+    await page.pause();
+
+});
+
+test('file upload when type file is not present test', async ({ page }) => {
+
+    //file upload
+    //single/multiple files
+    //type = file is not there.....its a button with no type=file attribute
+
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/file-upload.html');
+
+    let [fileUpload] = await Promise.all([
+        page.waitForEvent('filechooser'),
+        page.locator('#custom-upload-btn').click(),
+    ]);
+
+    await fileUpload.setFiles([
+        '/Users/naveenautomationlabs/Downloads/normalfiles/v8-architecture.html',
+        '/Users/naveenautomationlabs/Downloads/normalfiles/WhatisJavaScript.pdf',
+        '/Users/naveenautomationlabs/Downloads/normalfiles/locators.md'
+    ]);
+
+    await page.pause();
+
+    await fileUpload.setFiles([
+        '/Users/naveenautomationlabs/Downloads/normalfiles/v8-architecture.html',
+        '/Users/naveenautomationlabs/Downloads/normalfiles/WhatisJavaScript.pdf',
+    ]);
+
+    await page.pause();
+
+    await fileUpload.setFiles([]);
+
+    await page.pause();
+
+});
+
+
+test('TC_PrintBallerDetails', async ({ page }) => {
+    await page.goto("https://www.cricinfo.com/series/afghanistan-in-ireland-2026-1528534/ireland-vs-afghanistan-3rd-odi-1528552/full-scorecard")
+    await page.waitForTimeout(3000);
+    await BowlerDet(page);
+
+})
+
+async function BowlerDet(page: Page) {
+    const bowlerRows = page.locator('table')
+        .filter({ hasText: 'BOWLING' })
+        .locator('tbody tr')
+        .filter({ has: page.locator('a[href*="cricketers"]') });
+
+    const rows = await bowlerRows.all();
+
+    for (const row of rows) {
+        const data = await row.innerText();
+        console.log(data.trim());
+        console.log('=========');
+    }
+}
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 20 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/fillwithdelay.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('fill value with delay test', async ({ page }) => {
+
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    await page.getByRole('textbox', { name: '* First Name' }).pressSequentially('Naveen Automation Labs', { delay: 500 });
+
+    await page.pause();
+
+});
+
+//secrets --- vault, jenkins, github actions
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 21 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/frame.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Frame, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('Iframe element test', async ({ page }) => {
+
+    await page.goto('https://www.formsite.com/templates/registration-form-templates/vehicle-registration-form/');
+
+    await page.getByTitle('Vehicle-Registration-Forms-and-Examples').click();
+
+    //Iframe DOM will be loaded....
+
+    let iFrameLocator = page.frameLocator('#frame-one748593425'); //capture the iframe
+    await iFrameLocator.getByRole('textbox', { name: 'Proposal title' }).fill('Automation Testing');
+    await iFrameLocator.getByRole('textbox', { name: 'Location' }).fill('Delhi');
+
+
+    let header = await page.getByRole('heading', { name: 'Vehicle Registration Form', level: 3 }).innerText();
+    console.log(header);
+
+    await page.pause();
+
+});
+
+
+test('frame test', async ({ page }) => {
+
+    await page.goto('https://www.londonfreelance.org/courses/frames/index.html');
+
+    let header = await page.frameLocator('[name="main"]').getByRole('heading', { level: 2 }).innerText();
+    console.log(header);
+
+    let footer = await page.frameLocator('[name="bot"]').getByRole('heading', { level: 2 }).innerText();
+    console.log(footer);
+
+    await page.pause();
+
+});
+
+
+test('total frames count test', async ({ page }) => {
+
+    await page.goto('https://www.londonfreelance.org/courses/frames/index.html');
+
+    let allFrames: Frame[] = page.frames();
+    let frameCount = allFrames.length;
+    console.log('total number of frames: ', frameCount); //9
+
+    for (let ele of allFrames) {
+        let frameName = ele.name();
+        let frameURL = ele.url();
+        console.log(frameName, ' : ', frameURL);
+    }
+
+    // let frameCount = await page.locator('//frame').count();
+    // console.log(frameCount);
+
+    await page.pause();
+
+});
+
+
+test('nested Iframe test', async ({ page }) => {
+
+    await page.goto('https://www.dezlearn.com/nested-iframes-example/');
+
+    let parentFrame = page.frameLocator('#parent_iframe');
+    let childFrame = parentFrame.frameLocator('#iframe1');
+
+    await childFrame.getByRole('button', { name: 'Click Here' }).click();
+    let mesg = await childFrame.locator('#processing').innerText();
+    console.log(mesg);
+
+    console.log('-----------------');
+    await parentFrame.getByRole('button', { name: 'Click Here' }).click();
+    let outerMesg = await parentFrame.locator('#processing').innerText();
+    console.log(outerMesg);
+
+    console.log('-----------------');
+
+    let mainHeader = await page.getByRole('heading', { name: 'Nested iFrames Example', level: 2 }).innerText();
+    console.log(mainHeader);
+
+    // await page
+    //     .frameLocator('#parent_iframe')
+    //     .frameLocator('#iframe1')
+    //     .getByRole('button', { name: 'Click Here' })
+    //     .click();
+
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 22 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/getattribute.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, selectors, test, webkit } from '@playwright/test';
+
+test('get the attribute of any element test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    let placeholderVal = await page.getByRole('textbox', { name: 'First Name' }).getAttribute('placeholder');
+    console.log(placeholderVal);
+
+
+    let hrefVal = await page.getByRole('link', { name: 'Forgotten Password' }).getAttribute('href');
+    console.log(hrefVal);
+
+    console.log('-------------');
+
+    await page.getByRole('textbox', { name: 'First Name' }).fill('Naveen Automation Labs');
+    let newVal = await page.getByRole('textbox', { name: 'First Name' }).getAttribute('value');
+    console.log(newVal);
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 23 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/getByMethods.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator } from '@playwright/test';
+
+test('locators test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+    //it will work only for input fields
+    await page.getByLabel('E-Mail Address').fill('naveen@gmail.com');
+    await page.getByLabel('Password').fill('naveen@123');
+
+    await page.waitForTimeout(5000);
+
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    //text fields:
+    await page.getByPlaceholder('First Name').fill('Naveen Automation Labs');
+    await page.getByPlaceholder('Telephone').fill('878787878778');
+
+    //for images:
+    //await page.getByAltText('naveenopencart').highlight();
+    await page.getByRole('img', { name: 'naveenopencart' }).click();
+
+
+    await page.waitForTimeout(5000);
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 24 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/getByText.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator } from '@playwright/test';
+
+test('locators text test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+
+    let header = await page.getByText('Register Account', { exact: true }).textContent();
+    console.log(header);
+
+    let headerValue = await page.getByRole('heading', { name: 'Register Account', exact: true }).textContent();
+    console.log(headerValue);
+
+    //we will use getByText:
+    //for paragraphs, strong, span, div
+
+    await page.waitForTimeout(5000);
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 25 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/getbyTitle.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, selectors, test, webkit } from '@playwright/test';
+
+test('get by title locator test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    //it will work only if <title> attribute is present for the element
+
+    await page.getByTitle('naveenopencart').click();
+    await page.pause();
+
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 26 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/googlesearch.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('google search test', async ({ page }) => {
+    await page.goto('https://www.google.com/');
+
+    await page.getByRole('combobox', { name: 'Search' }).fill('Naveen Automation Labs');
+
+    //await page.getByText('naveen automation labs course').click();
+
+    //locator('div.wM6W7d span').filter({hasText: 'training'})
+
+    await page.pause();
+
+});
+
+
+test('amazon search test', async ({ page }) => {
+    await page.goto('https://www.amazon.in/');
+
+    await page.getByRole('searchbox', { name: 'Search Amazon.in' }).fill('MacBook Pro');
+    await page.locator('div.left-pane-results-container').getByText('macbook pro cover', { exact: true }).click();
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 27 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/highlightElement.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator } from '@playwright/test';
+
+test('locators test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+    await page.getByRole('heading', { name: 'Returning Customer', exact: true }).highlight();
+    await page.getByRole('textbox', { name: 'E-Mail Address', exact: true }).highlight();
+    await page.getByRole('link', { name: 'Forgotten Password', exact: true }).first().highlight();
+
+    //can be used for the demo purpose
+    //debug purpose
+
+    await page.waitForTimeout(15000);
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 28 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/hooks.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//hooks: before(setup) and after(teardown)
+
+import { test } from '@playwright/test';
+
+//1
+//Runs ONCE before all tests in the test file
+test.beforeAll(async () => {
+    console.log('Before All -- connect to the DB');
+    //user creation
+    //admin settings
+    //uploading test data
+});
+
+//2
+//Runs before each test
+test.beforeEach(async () => {
+    console.log('Before Each -- login to the app');
+});
+
+//Runs after each test
+test.afterEach(async () => {
+    console.log('After Each -- logout from the app');
+});
+
+//Runs ONCE after all tests in the test file
+test.afterAll(async () => {
+    console.log('After All -- disconnect to the DB');
+    //delete user
+    //reset admin settings
+    //delete the test data
+});
+
+test('title test', async () => {
+    console.log('title test');
+});
+
+test('home page test', async () => {
+    console.log('home page test');
+});
+
+test('payment page test', async () => {
+    console.log('payment page test');
+});
+
+test('cart page test', async () => {
+    console.log('cart page test');
+});
+
+test('search page test', async () => {
+    console.log('search page test');
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 29 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/jsalert.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//JS Aserts -- JS Pop UPs -- modal dialoges
+//Js Methods
+//1. alert('messg/eror mesg')
+//2. confirm('are you sure???')
+//3. prompt('mesg with textbox')
+
+
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('JS Alert Pop Up Handle test', async ({ page }) => {
+
+    //default listener: dismiss the alert
+
+    //1. - Alert -- just accept it...
+    page.on('dialog', async (popup) => {
+        if (popup.type() === 'alert') {
+            console.log(popup.message());
+            await popup.accept();
+        }
+    });
+
+    //2. - Confirm -- just accept it...
+    page.on('dialog', async (popup) => {
+        if (popup.type() === 'confirm') {
+            console.log(popup.message());
+            await popup.accept();//click ok
+            //await popup.dismiss();//click cancel
+        }
+    });
+
+    //2. - Prompt -- just accept it...
+    page.on('dialog', async (popup) => {
+        if (popup.type() === 'prompt') {
+            console.log(popup.message());
+            await popup.accept('Naveen Automation Labs....');//click ok and enter text messg
+            //await popup.dismiss();//click cancel
+        }
+    });
+
+    await page.goto('https://the-internet.herokuapp.com/javascript_alerts');
+
+    await page.getByRole('button', { name: 'Click for JS Alert' }).click();
+    await page.waitForTimeout(3000);
+
+    await page.getByRole('button', { name: 'Click for JS Confirm' }).click();
+    await page.waitForTimeout(3000);
+
+    await page.getByRole('button', { name: 'Click for JS Prompt' }).click();
+    await page.waitForTimeout(3000);
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 30 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/locatorchain.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//parent --> child --> child
+
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('chain locator test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    // locator('form').getByRole('textbox', { name: 'First Name' })
+    // locator('#column-right').getByRole('link', { name: 'Forgotten Password' })
+    // locator('form').getByRole('link', { name: 'Forgotten Password' })
+
+    await page
+        .locator('form')
+        .getByRole('textbox', { name: 'First Name' })
+        .fill('Naveen Automation Labs');
+
+    await page.waitForTimeout(2000);
+
+    await page
+        .locator('#column-right')
+        .getByRole('link', { name: 'Forgotten Password' })
+        .click();
+
+    await page.pause();
+
+});
+
+
+//td[text()='GUI']/preceding-sibling::td/input[@type='checkbox'] --xpath with xpath axes
+//td[text()='GUI']/following-sibling::td/input[@value='Delete']
+
+
+test('webtable handing test', async ({ page }) => {
+    await page.goto('https://qavbox.github.io/demo/webtable/');
+    await page
+        .locator('#table01')
+        .locator('tr')
+        .filter({ hasText: 'GUI' })
+        .getByRole('checkbox')
+        .click();
+
+    await page
+        .locator('#table01')
+        .locator('tr')
+        .filter({ hasText: 'GUI' })
+        .getByRole('button', { name: 'Delete' })
+        .click();
+
+
+    let officeName = await page.locator('#table02').locator('tr').filter({ hasText: 'Ashton Cox' }).locator('td').nth(2).innerText();
+    console.log(officeName);
+
+    let colCount = await page.locator('#table02 tr th').count();
+    console.log(colCount);
+
+    let rowCount = await page.locator('#table02 tr').count() - 1;
+    console.log(rowCount);
+
+    await page.pause();
+
+});
+
+//locator('table.ci-scorecard-table').locator('tr').filter({hasText: 'Brandon King'}).first().locator('td').nth(1).locator('span').last()
+//locator('table.ci-scorecard-table').locator('tr').filter({hasText: 'Kavem Hodge'}).first().locator('td').nth(1).locator('span').last()
+
+
+test('fetch data from webtable test', async ({ page }) => {
+    await page.goto('https://www.w3schools.com/html/html_tables.asp');
+
+    let fullData: string[] = await page.locator('table').first().locator('tr').allInnerTexts();
+    for (let e of fullData) {
+        console.log(e);
+        console.log("==================");
+    }
+
+    await page.pause();
+
+});
+
+//innertText --
+//textContext -- parent + child+ extra white space ---> text
+
+
+test('select all checkboxes in webtable test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/webtable.html');
+
+    let checkboxes = await page.locator('table#resultTable tbody tr td').getByRole('checkbox').all();
+
+    for (let ele of checkboxes) {
+        await ele.click();
+        await page.waitForTimeout(2000);
+    }
+
+    // for (let i = 1; i < checkboxes.length; i++) {
+    //     await checkboxes[i].click();
+    //     await page.waitForTimeout(1000);
+    // }
+
+    await page.pause();
+
+});
+
+
+test('get tables data from cricinfo webtable test', async ({ page }) => {
+    await page.goto('https://www.cricinfo.com/series/the-hundred-men-s-competition-2026-1521176/trent-rockets-men-vs-birmingham-phoenix-men-22nd-match-1521252/full-scorecard');
+
+    let playerName = 'Rehan Ahmed';
+
+    let wicketTakerName = await page.locator('table.ci-scorecard-table')
+        .first().locator('tr')
+        .filter({ hasText: `${playerName}` })
+        .first()
+        .locator('td')
+        .nth(1)
+        .locator('span span').innerText();
+
+    console.log(wicketTakerName);
+
+    console.log("=================");
+
+    let playerScoreData = await page.locator('table.ci-scorecard-table')
+        .first().locator('tr')
+        .filter({ hasText: 'Will Smeed' })
+        .first()
+        .locator('td').all();
+
+    for (let ele of playerScoreData) {
+        let info = await ele.textContent();
+        console.log(info);
+    }
+
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 31 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/locatorxpathcss.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Locator, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('xpath and css test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    // //create the element + action
+    // await page.locator("//input[@id='input-firstname']").fill('naveen');
+
+    // let header = await page.locator("//h1[text()='Register Account']").textContent();
+    // console.log(header);
+
+    // await page.getByRole('heading', { name: 'Register Account', level: 1 }).textContent();
+
+    // await page.goto('https://naveenautomationlabs.com/opencart/ui/webtable.html');
+    // await page.locator("//td[text()='Joe.Root']/preceding-sibling::td/input[@type='checkbox']").click();
+
+    let firstName: Locator = page.locator('input#input-firstname123'); //no promise
+    await firstName.fill('Naveen');
+
+
+    //driver.findElement('input#input-firstname123');//http request - POST API <-- json(css) <---> server <--> browser
+    //NoSuchElementException
+
+    //await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 32 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/mousekey.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator, webkit } from '@playwright/test';
+
+
+test('Right Click test', async ({ page }) => {
+
+    await page.goto('https://swisnl.github.io/jQuery-contextMenu/demo.html');
+
+    //right click or content click on context menu:
+
+    await page.getByText('right click me', { exact: true }).click({ button: 'right' });
+
+    await page.waitForTimeout(3000);
+
+    await page.getByText('Copy', { exact: true }).click();
+
+    await page.pause();
+
+
+});
+
+
+test('Drag and Drop test', async ({ page }) => {
+
+    await page.goto('https://jqueryui.com/resources/demos/droppable/default.html');
+
+    let source = page.locator('#draggable');
+    let target = page.locator('#droppable');
+
+    await source.dragTo(target);
+
+    await page.pause();
+
+});
+
+
+test('level 2 menu & sub mneu handling test', async ({ page }) => {
+
+    await page.goto('https://www.spicejet.com/');
+
+    await page.getByText('Travel Policies', { exact: true }).hover();//L1
+
+    //wait for the sub menu element:
+    await page.getByText('Passenger Rights', { exact: true }).waitFor({ state: 'visible' });
+
+    await page.getByText('Passenger Rights', { exact: true }).click();//L2
+
+    await page.pause();
+
+});
+
+
+test('level 4 menu & sub menu handling test', async ({ page }) => {
+
+    await page.goto('https://www.bigbasket.com/');
+
+    await page.getByText('Shop by', { exact: true }).last().click(); //L1
+
+    await page.locator('[id*="headlessui-menu-items"]').getByRole('link', { name: 'Beverages' }).last().hover(); //L2
+
+    await page.getByRole('link', { name: 'Tea', exact: true }).hover(); //L3
+
+    await page.getByRole('link', { name: 'Green Tea' }).click(); //L4
+
+    await page.pause();
+
+});
+
+
+test('Best Buy level 4 menu & sub menu handling test', async ({ page }) => {
+    await page.goto('https://www.bestbuy.com/?intl=nosplash');
+
+    await page.getByText('Shop', { exact: true }).nth(0).click(); //L1
+    await page.locator('[data-testid="menu-level1-container"]').getByRole('button', { name: 'Video Games' }).click();
+    await page.locator('[data-testid="menu-level2-container"]').getByRole('button', { name: 'XBOX' }).click();
+    await page.getByRole('link', { name: 'Explore XBOX' }).click();
+
+    await page.pause();
+
+});
+
+
+// test('sample test', async ({ page }) => {
+
+//     await page.goto('https://www.sreenidhirajakrishnan.com');
+//     await page.waitForTimeout(3000);
+
+//     await page.getByRole('button', { name: 'Interview Prep' }).hover();
+//     await page.waitForTimeout(2000);
+
+//     let allLinks: Locator[] = await page.locator('div.absolute a').all();
+
+//     console.log(allLinks.length);
+
+
+//     for (let ele of allLinks) {
+//         await ele.click();
+//         console.log(await page.title());
+//         await page.waitForTimeout(1000);
+//         await page.getByRole('button', { name: 'Interview Prep' }).hover();
+//         allLinks = await page.locator('div.absolute a').all();
+//     }
+
+
+// });
+
+
+test('keyboard enter test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+    let searchBox = page.getByRole('textbox', { name: 'Search' });
+    await searchBox.fill('Macbook');
+
+    //Press Enter from the keyboard:
+    await searchBox.press('Enter');
+
+    await page.pause();
+
+});
+
+
+test('Keyboard Tab Sequence with Accessibility Form Submission test', async ({ page }) => {
+
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    let firstName = page.getByRole('textbox', { name: '* First Name' });
+    await firstName.fill('Zain');
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('Automation');//LN
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('zainautomation123@gmail.com');//email
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('9890987876');//tel
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('zain@123');//pwd
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('zain@123');//confirm pwd
+
+    await page.keyboard.press('Tab');//sub -- no
+    await page.keyboard.press('ArrowRight');//sub -- yes
+
+    await page.keyboard.press('Tab'); //privacy policy
+
+    await page.keyboard.press('Tab'); //checkbox
+    await page.keyboard.press('Space');//click on checkbox
+
+    await page.keyboard.press('Enter');//press enter -- submit the form
+
+    await page.pause();
+
+});
+
+
+test('keyboard copy paste test', async ({ page }) => {
+
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    let firstName = page.getByRole('textbox', { name: '* First Name' });
+    await firstName.fill('ZainAutomation');
+
+    //Control + A
+    //Control + C
+    //Control + V
+
+    await firstName.press('ControlOrMeta+A');
+    await firstName.press('ControlOrMeta+C');
+
+    let lastName = page.getByRole('textbox', { name: '* Last Name' });
+    lastName.press('ControlOrMeta+V');
+
+    await page.waitForTimeout(3000);
+
+    await firstName.press('ControlOrMeta+A');
+    await firstName.press('Backspace');
+
+    //Hard Refresh the page: control+shift+R
+    //await page.keyboard.press('ControlOrMeta+Shift+R');
+
+    //open a new tab in new window:
+    await page.getByRole('link', { name: 'Forgotten Password' }).click({ modifiers: ['ControlOrMeta'] });
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 33 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/mouserhoveicici.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+
+test('Webtable with pagination with single selection test', async ({ page }) => {
+
+    await page.goto('https://www.iciciprulife.com/insurance-guide/financial-planning-tools-calculators/power-compounding-calculator.html');
+    await page.waitForTimeout(3000);
+    let allPoints = page.locator('.highcharts-markers .highcharts-point');
+    let allDots = await allPoints.all();
+    console.log('total number of dots in graph: ', allDots.length);//20
+
+    for (let ele of allDots) {
+        await ele.hover(); //trigger the hover event
+        //await page.waitForTimeout(2000);
+
+        let box = await ele.boundingBox();
+        let x = box!.x + box!.width / 2;
+        let y = box!.y + box!.height / 2;
+
+        await page.mouse.move(x, y);
+        let yearAmount = await page.locator('.highcharts-tooltip').textContent();
+        console.log(yearAmount);
+        await page.waitForTimeout(500);
+
+    }
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 34 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/multipleelements.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Locator, Page, chromium, expect, firefox, selectors, test, webkit } from '@playwright/test';
+
+test('get all the links test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home');
+
+    //total links
+    //<a href text>
+    let allLinks: Locator[] = await page.locator('a[href]').all();
+    console.log('total links:', allLinks.length);
+
+    let totalLinks = await page.locator('a[href]').count();
+    console.log('total links: ', totalLinks);
+
+    let linksCount = await page.getByRole('link').count();
+    console.log('total links with Role:', linksCount);
+});
+
+test('fetch all the links text test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home');
+
+    //total links
+    //<a href text>
+    let allLinks: Locator[] = await page.locator('a[href]').all();
+    console.log('total links:', allLinks.length); //73
+
+    for (let ele of allLinks) {
+        let text = await ele.textContent();
+        let href = await ele.getAttribute('href');
+        console.log(text, " : ", href);
+    }
+
+});
+
+
+test('fetch all the images test', async ({ page }) => {
+    await page.goto('https://www.flipkart.com/');
+
+    //total links
+    //<a href text>
+    let allImages: Locator[] = await page.locator('img').all();
+    console.log('Total images: ', allImages.length);
+
+    for (let ele of allImages) {
+        let altVal = await ele.getAttribute('alt');
+        console.log(altVal);
+    }
+});
+
+
+test('iterate links and click with break test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+    let allLinks: Locator[] = await page.locator('a.list-group-item').all();
+    console.log('total right panel links: ', allLinks.length); //13 --: 0 to 12
+
+    for (let ele of allLinks) {
+        await ele.highlight();
+        let linkText = await ele.textContent();
+        console.log(linkText);
+        await page.waitForTimeout(1000);
+        if (linkText === 'Recurring payments') {
+            await ele.click();
+            break;
+        }
+    }
+    await page.pause();
+
+});
+
+
+test('iterate all the links text test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+    let allPanelLinks: string[] = await page.locator('a.list-group-item').allInnerTexts();
+    console.log(allPanelLinks);
+    for (let ele of allPanelLinks) {
+        console.log(ele);
+    }
+
+});
+
+
+// robert.rodriguez614@test.com/pw123
+// page.getByRole('heading', {level: 2})
+
+
+test('get all headers test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+    await page.getByRole('textbox', { name: 'E-Mail Address' }).fill('robert.rodriguez614@test.com');
+    await page.getByRole('textbox', { name: 'Password' }).fill('pw123');
+    await page.getByRole('button', { name: 'Login' }).click();
+
+    await page.waitForTimeout(2000);
+
+    let allHeaders: string[] = await page.getByRole('heading', { level: 2 }).allInnerTexts();
+    console.log('total headers: ', allHeaders.length);
+    console.log(allHeaders);
+});
+
+
+//<div login>
+//  <a myLogin>
+
+//textContext() -- text of the element + text of the child element as well --> login myLogin
+//innerText() -- text
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 35 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/multiplewindowhandle.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator, webkit, Page } from '@playwright/test';
+
+
+test('two window handle test', async ({ browser }) => {
+
+    let context = await browser.newContext();
+    let page = await context.newPage();
+    await page.goto('https://orangehrm.com/contact-sales');
+
+    let [childWindowPage] = await Promise.all([
+        context.waitForEvent('page'), //start listening the page event in the browser
+        page.getByRole('link', { name: 'About Us' }).click()//this will click on the link and generate a new page
+    ]);
+
+    await childWindowPage.waitForLoadState();//child window is loaded properly
+
+    let allPages = context.pages();
+    console.log('total number of pages: ', allPages.length); //2
+
+    //await childWindowPage.bringToFront(); //visualize whats happening on the child window...
+
+    console.log('the child window title: ', await childWindowPage.title());
+    console.log('the child window header: ', await childWindowPage.getByRole('heading', { name: 'Our Leadership Team', level: 2 }).textContent());
+    await childWindowPage.close();//close the child window
+
+    console.log('the parent window title: ', await page.title());
+
+    await page.pause();
+
+});
+
+
+test('multiple windows handle test', async ({ browser }) => {
+
+    let context = await browser.newContext();
+    let page = await context.newPage();
+    await page.goto('https://orangehrm.com/contact-sales');
+
+    //array of locators/links:
+    let links: Locator[] = [
+        page.getByRole('link', { name: 'About Us' }),
+        page.getByRole('link', { name: 'Contact Us' }),
+        page.getByRole('link', { name: 'Press Releases' }),
+        page.getByRole('link', { name: 'Become a Partner' })
+    ];
+
+    let childWindowPages: Page[] = []; //0 --> 4
+    for (let link of links) {
+        let [childWindow] = await Promise.all([
+            context.waitForEvent('page'),
+            link.click()
+        ]);
+
+        await childWindow.waitForLoadState();
+        childWindowPages.push(childWindow);
+    }
+
+    console.log('total number of pages: ', context.pages().length);//5
+
+    //go to each and every child winow and get the title, close it...
+
+    for (let i = 0; i < childWindowPages.length; i++) {
+        let child = childWindowPages[i];
+        await child.bringToFront();
+        console.log(await child.title());
+        await child.waitForTimeout(1000);
+        await child.close();
+    }
+
+    //back to parent window...only 1 tab is left...
+
+    await page.bringToFront();
+    console.log('parent window title: ', await page.title());
+    console.log('total number of pages: ', context.pages().length); //1
+
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 36 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/multiuser.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, BrowserContext, Page } from '@playwright/test';
+
+test('multi user test', async ({ browser }) => {
+    let ctx1: BrowserContext = await browser.newContext();//window1
+    let ctx2: BrowserContext = await browser.newContext();//window2
+
+    let page1: Page = await ctx1.newPage();
+    let page2: Page = await ctx2.newPage();
+
+    await page1.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+    await page1.locator('#input-email').fill('manish.wilson561@test.com');
+    await page1.locator('#input-password123').fill('pw123');
+    await page1.locator('//input[@value="Login"]').click();
+
+
+    await page2.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+    await page2.locator('#input-email').fill('sasmita.brown419@test.com');
+    await page2.locator('#input-password').fill('pw123');
+    await page2.locator('//input[@value="Login"]').click();
+
+    // await page1.pause();
+    // await page2.pause();
+
+    // await page1.close();
+    // await page2.close();
+
+    await browser.close();
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 37 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/nonselectdropdown.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('non select based drop down test', async ({ page }) => {
+    await page.goto('https://www.jqueryscript.net/demo/Drop-Down-Combo-Tree/');
+
+    await page.locator('#justAnInputBox').click();
+    await page.waitForTimeout(2000);
+
+    // await page
+    //     .locator('span.comboTreeItemTitle')
+    //     .filter({ hasText: 'choice 6 2 3' })
+    //     .first()
+    //     .click();
+
+    //tc01: multi selection
+    // await selectChoice(page, ['choice 5', 'choice 4', 'choice 6 2 2', 'choice 7']);
+
+    //tc_02: single selection
+    await selectChoice(page, ['choice 5']);
+
+    //tc_03: all selection
+
+    await page.pause();
+
+});
+
+
+async function selectChoice(page: Page, choices: string[]): Promise<void> {
+
+    for (let ch of choices) {
+        await page.locator('span.comboTreeItemTitle')
+            .filter({ hasText: `${ch}` })
+            .first()
+            .click();
+    }
+
+}
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 38 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/pageloadingwait.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('page loading wait until test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home', { waitUntil: 'load' })
+
+    //e1 -- click
+});
+
+//networkidle : in the last 500 ms all the api network calls are settled or completed.
+//domcontentloaded: elements are loaded in the DOM of the page but there is no gurantee that elements are
+// visible on the page
+//commit: element in there in the DOM, and css/js/images are still pending to be visible on the page
+//load: DOM is loaded, css/js/apis/images/resources are loaded and visible on the page and page is ready now
+
+
+//url/launching page with url ----> DOM loaded ---> page loaded (elements, JS, css, html)
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 39 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/psuedoele.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator } from '@playwright/test';
+
+
+test('Psuedo Element test', async ({ page }) => {
+
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    //window.getComputedStyle(document.querySelector('label[for="input-firstname"]'), '::before').getPropertyValue('content')
+
+    //run JS code with Playwright:
+
+    let content = await page.evaluate(() => {
+        return window.getComputedStyle(document.querySelector('label[for="input-firstname"]')!, '::before').getPropertyValue('content');
+    });
+
+    console.log(content); //"*"
+
+    let color = await page.evaluate(() => {
+        return window.getComputedStyle(document.querySelector('label[for="input-firstname"]')!, '::before').getPropertyValue('color');
+    });
+
+    console.log(color);
+
+    let title = await page.evaluate(() => {
+        alert('you are on the register page....');
+        return document.title;
+    });
+
+    console.log(title);
+
+    await page.pause();
+
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 40 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/radiocheckbox.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator } from '@playwright/test';
+
+test('radio and checkbox test', async ({ page }) => {
+    await page.goto('https://www.shapemyinterview.com/study/playwright-locator-playground.html?v=2026-07-26');
+
+
+    //radio:
+    await page.getByRole('radio', { name: 'Ruby' }).click();
+
+    //checkbox:
+    await page.getByRole('checkbox', { name: 'Cypress' }).click();
+    await page.getByRole('checkbox', { name: 'I agree to the Terms & Conditions', exact: true }).click();
+
+
+    // await page.waitForTimeout(5000);
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 41 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/randompopup.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator, webkit } from '@playwright/test';
+
+
+test('kill random popups test', async ({ page }) => {
+
+    await page.addLocatorHandler(
+        page.getByRole('button', { name: 'Allow all' }),
+        async (allowAllBtn) => {
+            await allowAllBtn.click();
+            console.log('Cookie Banner is killed....');
+        }
+    );
+
+
+    await page.goto('https://orangehrm.com/contact-sales');
+
+
+    await page.getByRole('textbox', { name: 'Full Name' }).fill('Naveen');
+
+    await page.pause();
+
+});
+
+
+test('launch spicejet', async ({ page }) => {
+
+    await page.goto('https://www.spicejet.com/');
+
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 42 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/registerlocator.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator } from '@playwright/test';
+
+test('locators test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+
+    //await page.getByRole('textbox', { name: '* Password', exact: true }).fill('test@123');
+
+
+    // await page.getByRole('link', { name: 'Forgotten Password' }).last().click();
+    await page.getByRole('link', { name: 'Forgotten Password' }).nth(0).click();
+
+
+    await page.waitForTimeout(5000);
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 43 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/retrycheck.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { expect, test } from '@playwright/test';
+
+
+test.describe('New Login related test cases', () => {
+
+    test.describe.configure({ retries: 2 });
+
+    test('google title test', async ({ page }) => {
+        await page.goto('https://www.google.com');
+        console.log(await page.title());
+    });
+
+    test('google URL test', async ({ page }) => {
+        await page.goto('https://www.google.com');
+        console.log(page.url());
+    });
+
+
+    test('google random test', async ({ }) => {
+        expect(100).toBe(200);
+    });
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 44 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/selectdropdown.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test('single selection select drop down test', async ({ page }) => {
+    await page.goto('https://orangehrm.com/contact-sales');
+
+    let selectVal: string[] = await page.getByRole('combobox', { name: 'Country' }).selectOption('India');//direct drop down value
+    console.log(selectVal);
+    //Role: combobox
+
+    await page.waitForTimeout(2000);
+
+    selectVal = await page.getByRole('combobox', { name: 'Country' }).selectOption({ label: 'Angola' }); //visible text
+    console.log(selectVal);
+
+    await page.waitForTimeout(2000);
+
+    selectVal = await page.getByRole('combobox', { name: 'Country' }).selectOption({ value: 'Belgium' }); //value attribute
+    console.log(selectVal);
+
+    selectVal = await page.getByRole('combobox', { name: 'Country' }).selectOption({ index: 15 }); //using index
+    console.log(selectVal);
+
+    let curentVal = await page.getByRole('combobox', { name: 'Country' }).inputValue();
+    console.log(curentVal);
+
+
+    await page.pause();
+
+
+});
+
+
+test('multi selection select drop down test', async ({ page }) => {
+    await page.goto('https://selenium08.blogspot.com/2019/11/dropdown.html');
+    //multiple attribute is present for the select tag.
+    //Role: listBox
+
+    let selectedVal = await page.locator('[name="Month"]').selectOption(["January", "May", "November", "December"]);
+    console.log(selectedVal);
+
+    // await page.locator('[name="Month"]').selectOption(["January", "May", "November", "December"]);
+    // let addedVal = await page.locator('[name="Month"]').inputValue();
+    // console.log(addedVal);
+
+    await page.pause();
+
+});
+
+
+// css:
+//parent child
+//footer a
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 45 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/shadowdom.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { test, expect, Locator } from '@playwright/test';
+
+
+//Browser ---> Page ---> elements
+//--> shadow DOM --> elements --> click, fill
+//Auto piercing
+
+
+test('shadow dom element test', async ({ page }) => {
+
+    //await page.setViewportSize({ width: 1800, height: 1080 });
+
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/shadow-dom.html');
+
+    //button in shadow DOM:
+    //await page.getByRole('button', { name: 'Click Me' }).click();
+    await page.locator('//button[@id="shadow-btn"]').click();
+
+    //input textbox in shadow DOM:
+    await page.getByRole('textbox', { name: 'Username' }).fill('Naveen Automation Labs');
+    await page.getByRole('button', { name: 'Submit' }).click();
+
+    //level 1 ---> level 2 ---> element
+    page.getByRole('textbox', { name: 'Type inside nested shadow...' }).fill('I love PW');
+
+    //l1 --> l2 -- l3 -- element
+    page.getByRole('button', { name: 'Deep Click' }).click();
+
+    //closed shadow dom element:
+    // page.locator('#closed-input').fill('hey its closed....');
+
+    await page.pause();
+
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 46 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/storagestate.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+test.use({ storageState: './opencartstate.json' });
+
+test('launch cart page test without login', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=checkout/cart');
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/account');
+    await page.pause();
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 47 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/svgelement.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//SVG: Scalable Vector Graphics
+
+//xpath
+//1. normal xpath will not be used
+//2. special xpath using local-name() or name()
+//css:
+//1. regular css selectors
+
+
+//normal xpath: //svg[@fill='none'] -- wont work
+
+//special xpath: //*[local-name()='svg' and @fill='none']
+
+//css: svg[fill='none'] -- will work
+
+import { test, expect, Locator } from '@playwright/test';
+
+//Browser ---> Page ---> elements
+//--> shadow DOM --> elements --> click, fill
+//Auto piercing
+
+
+test('SVG element test', async ({ page }) => {
+
+    await page.goto('https://www.flipkart.com/');
+
+    await page.getByPlaceholder('Search for Products, Brands and More').first().fill('MacBook Pro');
+
+    //click on search icon using css:
+    // await page
+    //     .getByRole('button', { name: 'Search for Products, Brands and More' })
+    //     .locator('svg[fill="none"]')
+    //     .click();
+
+    //click on search icon using special xpath:
+    await page
+        .getByRole('button', { name: 'Search for Products, Brands and More' }).first()
+        .locator('//*[local-name()="svg"]')
+        .click();
+
+    await page.pause();
+
+
+});
+
+
+test('SVG graph element test', async ({ page }) => {
+
+    await page.goto('https://petdiseasealerts.org/forecast-map');
+
+    await page.waitForTimeout(5000);
+
+    //let frame = page.frameLocator('//iframe[contains(@id,"map-instance")]');
+
+    let frame = page.frameLocator('iframe[id*="map-instance"]');
+    let allRegions = await frame.locator('g.region').all();
+
+    console.log('total number of regions in USA: ', allRegions.length);
+
+    for (let ele of allRegions) {
+        await ele.hover({ force: true });
+        let stateId = await ele.getAttribute('id');
+        console.log(stateId);
+        await page.waitForTimeout(500);
+    }
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 48 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/testgrouping.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { expect, test } from '@playwright/test';
+
+
+//test groups --> test suites ---> multiple test cases
+//test.describe --> test() test()....
+
+test.describe('Login related test cases', () => {
+
+    test('google title test @sanity', async ({ page }) => {
+        await page.goto('https://www.google.com');
+        console.log(await page.title());
+    });
+
+    test('google URL test', async ({ page }) => {
+        await page.goto('https://www.google.com');
+        console.log(page.url());
+    });
+
+
+    test('google random test', async ({ page }) => {
+        await page.goto('https://www.google.com');
+    });
+
+});
+
+
+test.describe('Search related test cases', () => {
+
+    test('google title test', async ({ page }) => {
+        await page.goto('https://www.google.com');
+        console.log(await page.title());
+    });
+
+    test('google URL test', async ({ page }) => {
+        await page.goto('https://www.google.com');
+        console.log(page.url());
+    });
+
+
+    test('google random test', async ({ page }) => {
+        await page.goto('https://www.google.com');
+    });
+
+});
+
+
+test.describe('OpenCart related test cases', () => {
+
+    test.beforeAll(async () => {
+        console.log('connect to DB');
+    });
+    test.beforeEach(async () => {
+        console.log('create a user');
+    });
+    test.afterAll(async () => {
+        console.log('disconnect to DB');
+    });
+    test.afterEach(async () => {
+        console.log('delete a user');
+    });
+
+    test('title test', async ({ page }) => {
+        await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home');
+        console.log(await page.title());
+    });
+
+    test('URL test', async ({ page }) => {
+        await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home');
+        console.log(page.url());
+    });
+
+
+    test('random test', async ({ page }) => {
+        await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=common/home');
+    });
+
+});
+
+
+test.describe.serial('user CRUD test cases', () => {
+
+    test('create a user  test', async ({ }) => {
+        console.log('user is created:', 1001);
+    });
+
+    test('get a user  test', async ({ }) => {
+        console.log('get user using userID: ', 1001);
+    });
+
+    test('update a user  test', async ({ }) => {
+        console.log('update user using userID: ', 1001);
+    });
+
+    test('delete a user  test', async ({ }) => {
+        console.log('delete user using userID: ', 1001);
+    });
+
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 49 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/testoptions.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { expect, test } from '@playwright/test';
+test('title test', async () => {
+    console.log('title test');
+});
+
+test('url test', async () => {
+    console.log('url test');
+});
+
+// test.only('search test', async () => {
+//     console.log('search test');
+// });
+
+test.skip('cart test', async () => {
+    console.log('cart test');
+    //WIP
+});
+
+test('payment test', async () => {
+    test.fixme();//known inssue, fix it later
+    console.log('payment test');
+});
+
+
+test('Order test', async () => {
+    test.fail(); //this test is expected to fail
+    console.log('payment test');
+    expect(100).toBe(200);
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 50 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/waits.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//1. Auto waiting process:
+//Actions: click, fill, check, hover, etc... --> automatically wait for the element:
+//Actionalibility check:
+//1. Attached to the DOM
+//2. Visible on the page
+//3. Stable (not animating)
+//4. Enabled
+//5. All the events are also completed
+//https://playwright.dev/docs/actionability
+
+
+import { Page, chromium, expect, firefox, selectors, test, webkit } from '@playwright/test';
+
+test('wait test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    // await page.getByRole('button', { name: 'continue' }).click();
+
+    //explicit wait : dynamic wait:
+    //1. expect wait(web assertions wait): default time: 5000 ms
+    //expect(page.getByText('First Name must be between 1 and 32 characters!', { exact: true })).toBeVisible();
+
+    //2. wait for URL:
+    await page.waitForURL(/route=account\/register/, { timeout: 5000 }); //5 secs
+
+    //3. wait for event: dialog, filechoose, download, page
+
+    //4. static wait: pause for 5 secs:
+    //await page.waitForTimeout(10000); //not a good practice -- debugging purpoose
+
+    //5. wait for the element:explicitly waiting for the element:
+    //5.1: waitForSelector() ---> legacy wait -- Discouraged by PW -- v1.9
+    //this wont work for the getBy* methods
+    //this will work only with css/xpath/text
+    //state: 2 : attached , visible
+    //await (await page.waitForSelector('#input-firstname123', { state: 'visible', timeout: 5000 })).fill('naveen');
+
+    //5.2: waitFor(): v1.16:
+    //state: 4 : attached , visible, hidden, detached
+    //await page.locator('#input-firstname').waitFor({ state: 'visible', timeout: 5000 });
+    // await page.locator('#input-firstname123').fill('Naveen');
+    //await page.getByRole('textbox', { name: '* Last Name' }).waitFor({ state: 'visible', timeout: 5000 });
+
+    //timeout=30 --> navigationtimeout=10 --> timeout=5 secs
+    await page.locator('#input-firstname123').fill('Naveen', { timeout: 5000 });
+
+    console.log('....END....');
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 51 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/webtablepagination.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Browser, BrowserContext, Page, chromium, expect, firefox, test, webkit } from '@playwright/test';
+
+//01: single selection: username is found on the 1st page, on any page, on the last page, user is not found at all
+//02: multiple selection: usernames are found on the 1st page, on any page, on the last page, users are not found at all
+
+
+test('Webtable with pagination with single selection test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/webtable-pagination.html');
+
+    while (true) {
+
+        let isUserPresent = await page.locator(`td:has-text("cameron_ray")`).first().isVisible();
+        if (isUserPresent) {
+            //user is found on the 1st page itself..
+            await page.locator('table#dataTable tr').filter({ hasText: 'cameron_ray' }).first().getByRole('checkbox').check();
+            break;
+        }
+        else {
+            //username is not present on the 1st page, pagination logic:
+            //click on the next icon:
+            let nextEle = page.getByRole('button', { name: '›' });
+            await nextEle.click();
+            await page.waitForTimeout(1500);
+
+            let isNextEleDisabled = await nextEle.isDisabled();
+            if (isNextEleDisabled) {
+                console.log('pagination is over...username is not found...');
+                break;
+            }
+        }
+
+
+    }
+    //await page.pause();
+
+});
+
+
+test('Webtable with pagination with multiple selection test', async ({ page }) => {
+    await page.goto('https://naveenautomationlabs.com/opencart/ui/webtable-pagination.html');
+
+    while (true) {
+
+        let allUserChecks =
+            await page.locator('table#dataTable tr').filter({ hasText: 'john_doe' }).getByRole('checkbox').all();
+
+        if (allUserChecks.length > 0) {
+            //select all the checkboxes:
+            for (let ele of allUserChecks) {
+                await ele.check();
+            }
+        }
+        //go the next page, click on next icon:
+        let nextEle = page.getByRole('button', { name: '›' });
+
+        let isNextEleDisabled = await nextEle.isDisabled();
+        if (isNextEleDisabled) {
+            console.log('pagination is over...');
+            break;
+        }
+        await page.waitForTimeout(2000);
+        await nextEle.click();
+    }
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 52 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/windowsize.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+import { Page, chromium, expect, firefox, selectors, test, webkit } from '@playwright/test';
+
+// test.use({
+//     viewport: { width: 440, height: 956 }
+// });
+
+test('expect assertion test', async ({ page }) => {
+
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    await page.pause();
+
+});
+
+
+test('my assertion test', async ({ page }) => {
+
+    page.setViewportSize({ width: 400, height: 800 });
+
+    await page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/register');
+
+    await page.pause();
+
+});
+------------------------------------------------------------------------------
+END CODE
+
+
+==============================================================================
+EXAMPLE 53 OF 53  |  PLAYWRIGHT TEST EXAMPLES
+FILE: tests/workers.spec.ts
+==============================================================================
+START CODE
+------------------------------------------------------------------------------
+//workers: processes --> nodeJS
+//sequence or parallel mode
+
+//workers = 1 : sequence mode
+//workers = 4 : parallel mode
+
+//default worker count: cpu core = 8 / 2 = 4
+
+//cpu core = 1; w=4 : sequence
+
+//fullyParallel = true, w=4
+//total tcs = 82 (test case pool)
+//all the files and their test cases also will start running in the parallel mode
+//make sure that all the test cases are independent
+
+//tc1: order id = 123
+//tc2: oder id = 123
+
+//fullyParallel = false, w=4
+//w1 -- file 1 (10 tcs) -- 10 tcs will run in the sequential mode
+//w2 -- file 2(5 tcs) -- 5 tcs will run in the sequential mode
+//w3 -- file 3
+//w4 -- file 4
+
+//AAA -->
+
+//CRUD:
+//delete a user:
+//tc1: create a user: 101
+//tc2: get the user : 101
+//tc3: delete the user: 101
+
+//tc:  AAA
+//step1: create a user: 101
+//step2: get the user : 101
+//step3: delete the user: 101 + assertion
+------------------------------------------------------------------------------
+END CODE
+

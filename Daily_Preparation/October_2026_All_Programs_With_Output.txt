@@ -1,0 +1,967 @@
+﻿OCTOBER 2026 - JAVA PROGRAMS WITH OUTPUT
+Total programs: 24
+Source: October_2026_Programms.zip
+Contents: Original Java source code followed by console output for each program.
+==========================================================================================
+
+01. CountPalindromeWords
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class CountPalindromeWords {
+
+	public static void main(String[] args) {
+
+		String str = "madam java level radar selenium noon";
+
+		String[] words = str.split(" ");
+
+		int count = 0;
+
+		for (String word : words) {
+
+			String rev = "";
+
+			for (int i = word.length() - 1; i >= 0; i--) {
+				rev = rev + word.charAt(i);
+			}
+
+			if (word.equals(rev)) {
+				System.out.println(word);
+				count++;
+			}
+		}
+
+		System.out.println("Total palindrome words: " + count);
+	}
+}
+
+OUTPUT:
+madam
+level
+radar
+noon
+Total palindrome words: 4
+
+==========================================================================================
+
+02. CountTheTotalSubString
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+import java.util.regex.*;
+
+public class CountTheTotalSubString {
+
+	public static void main(String[] args) {
+
+		String str = "This is java java is super";
+
+		String updatedString = str.toLowerCase();
+
+		String SubString = "java";
+
+		Pattern pattern = Pattern.compile(SubString);
+		Matcher matcher = pattern.matcher(updatedString);
+
+		int count = 0;
+
+		while (matcher.find()) {
+			count++;
+		}
+
+		System.out.println(count);
+
+	}
+
+}
+
+OUTPUT:
+2
+
+==========================================================================================
+
+03. CountVowelsAndConsonentsFromTheString
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class CountVowelsAndConsonentsFromTheString {
+
+    public static void main(String[] args) {
+
+        String str = "ahetidou";
+
+        int vowels = 0;
+        int consonents = 0;
+
+        for (char c : str.toLowerCase().toCharArray()) {
+
+            if ("aeiou".indexOf(c) != -1) {
+                vowels++;
+            } else if (c >= 'a' && c <= 'z') {
+                consonents++;
+            }
+        }
+
+        System.out.println("Vowels: " + vowels);
+        System.out.println("Consonants: " + consonents);
+    }
+}
+
+
+
+//
+//        String str = "ahetidou";
+//
+//        int vowels = 0;
+//        int consonents = 0;
+//
+//        for (char c : str.toCharArray()) {
+//
+//            if (c == 'a' || c == 'e' || c == 'i'
+//                    || c == 'o' || c == 'u') {
+//
+//                vowels++;
+//
+//            } else {
+//                consonents++;
+//            }
+//        }
+//
+//        System.out.println("Vowels: " + vowels);
+//        System.out.println("Consonants: " + consonents);
+//    }
+//}
+//
+
+OUTPUT:
+Vowels: 5
+Consonants: 3
+
+==========================================================================================
+
+04. FindAllNonDuplicateChar
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class FindAllNonDuplicateChar {
+
+    public static void main(String[] args) {
+
+        String str = "abbcddeffgh";
+
+        for (char c : str.toCharArray()) {
+
+            if (str.indexOf(c) == str.lastIndexOf(c)) {
+                System.out.print(c);
+            }
+        }
+    }
+}
+
+OUTPUT:
+acegh
+
+==========================================================================================
+
+05. FindFirstDuplicateChar
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class FindFirstDuplicateChar {
+
+	public static void main(String[] args) {
+
+		String str = "abbcddeffgh";
+
+		for (char c : str.toCharArray()) {
+
+			if (str.indexOf(c) != str.lastIndexOf(c)) {
+
+				System.out.println("first duplicate: " + c);
+				break;
+			}
+		}
+	}
+
+}
+
+OUTPUT:
+first duplicate: b
+
+==========================================================================================
+
+06. FindSecondDuplicateChar
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class FindSecondDuplicateChar {
+
+	public static void main(String[] args) {
+
+//    	Explanation
+//    	1. str.indexOf(c) != str.lastIndexOf(c) — Checks whether the character is repeated.
+//    	2. str.indexOf(c) == i — Ensures the character is counted only once.
+//    	3. count++ — Counts distinct duplicate characters.
+//    	4. count == 2 — Finds the second distinct duplicate character.
+//    	5. break — Stops the loop once the result is found.
+
+		String str = "abbcddeffgh";
+
+		int count = 0;
+
+		for (int i = 0; i < str.length(); i++) {
+
+			char c = str.charAt(i);
+
+			if (str.indexOf(c) != str.lastIndexOf(c) && str.indexOf(c) == i) {
+
+				count++;
+
+				if (count == 2) {
+					System.out.println("Second duplicate: " + c);
+					break;
+				}
+			}
+		}
+	}
+}
+
+OUTPUT:
+Second duplicate: d
+
+==========================================================================================
+
+07. FindSecondNonDupCharFromTheString
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+import java.util.*;
+
+public class FindSecondNonDupCharFromTheString {
+
+	public static void main(String[] args) {
+
+		String str = "automation";
+		int count = 0;
+
+		Map<Character, Integer> map = new HashMap<>();
+
+		// Step 1: Count character occurrences
+		for (char c : str.toCharArray()) {
+			map.put(c, map.getOrDefault(c, 0) + 1);
+		}
+
+		// Step 2: Find second non-duplicate character
+		for (char c : str.toCharArray()) {
+
+			if (map.get(c) == 1) {
+				count++;
+
+				if (count == 2) {
+					System.out.println("Second non-duplicate: " + c);
+					break;
+				}
+			}
+		}
+	}
+}
+
+OUTPUT:
+Second non-duplicate: m
+
+==========================================================================================
+
+08. FindSecondNonDuplicateChar
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class FindSecondNonDuplicateChar {
+
+	public static void main(String[] args) {
+
+		String str = "automation";
+		int count = 0;
+
+		for (char c : str.toCharArray()) {
+
+			if (str.indexOf(c) == str.lastIndexOf(c)) {
+				// if(0==5)--false
+				// if(1== 1)--true
+
+				count++;
+				//If the the condition is true for if block
+				//then count will be incremented by 1
+				//so if the count become 2 then if block will execute
+				//Note:Accourding to the requirement we can change the 
+				//value of count
+				if (count == 2) {
+					System.out.println("Second non-duplicate: " + c);
+					break;
+				}
+			}
+		}
+	}
+}
+
+OUTPUT:
+Second non-duplicate: m
+
+==========================================================================================
+
+09. GenerateOutput
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class GenerateOutput {
+
+	public static void main(String[] args) {
+
+		String str = "a2b3c4";
+		// aabbbcccc
+
+		for (int i = 0; i < str.length(); i++) {
+			if (Character.isLetter(str.charAt(i))) {
+				System.out.print(str.charAt(i));// a
+			} else {
+				int a = Character.getNumericValue(str.charAt(i));
+
+				for (int j = 1; j < a; j++) {
+					System.out.print(str.charAt(i - 1));// a
+				}
+			}
+
+		}
+	}
+
+}
+
+OUTPUT:
+aabbbcccc
+
+==========================================================================================
+
+10. MaxOccuranceOfChar
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class MaxOccuranceOfChar {
+
+	public static void main(String[] args) {
+
+		String str = "aaaabccccdddd";
+
+		int arr[] = new int[126];
+
+		for (int i = 0; i < str.length(); i++) {
+			arr[str.charAt(i)] = arr[str.charAt(i)] + 1;
+		}
+
+		int max = 0;
+		char c = ' ';
+
+		for (int i = 0; i < str.length(); i++) {
+			if (arr[str.charAt(i)] > max) {
+				max = arr[str.charAt(i)];
+				c = str.strip().charAt(i);
+			}
+		}
+		System.out.println(c);
+
+		// Min occurance of char
+
+		int min = str.length() - 1;
+
+		char minChar = ' ';
+
+		for (int i = 0; i < str.length(); i++) {
+			if (arr[str.charAt(i)] < min) {
+				min = arr[str.charAt(i)];
+				minChar = str.charAt(i);
+			}
+		}
+		System.out.println(minChar);
+
+	}
+
+}
+
+OUTPUT:
+a
+b
+
+==========================================================================================
+
+11. OccuranceOFChar
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class OccuranceOFChar {
+
+	public static void main(String[] args) {
+
+		String str = "automation";
+
+		int arr[] = new int[126];
+
+		// Step 1: Count occurrences
+		for (int i = 0; i < str.length(); i++) {
+			arr[str.charAt(i)] = arr[str.charAt(i)] + 1;
+		}
+
+		// Step 2: Print in original order
+		for (int i = 0; i < str.length(); i++) {
+
+			char ch = str.charAt(i);
+
+			if (arr[ch] > 0) {
+				System.out.println(ch + " " + arr[ch] + " times");
+
+				arr[ch] = 0;
+			}
+		}
+	}
+}
+
+OUTPUT:
+a 2 times
+u 1 times
+t 2 times
+o 2 times
+m 1 times
+i 1 times
+n 1 times
+
+==========================================================================================
+
+12. OccuranceOfWords
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class OccuranceOfWords {
+
+	public static void main(String[] args) {
+
+		String str = "The Pune greate PunePunePune";
+
+		String[] words = str.split(" ");
+
+		Map<String, Integer> map = new LinkedHashMap<>();
+
+		// Step 1: Count normal words
+		for (String word : words) {
+
+			if (!word.equals("PunePunePune")) {
+				map.put(word, map.getOrDefault(word, 0) + 1);
+			}
+		}
+
+		// Step 2: Count Pune inside PunePunePune
+		String temp = "PunePunePune";
+
+		while (temp.startsWith("Pune")) {
+
+			map.put("Pune", map.get("Pune") + 1);
+
+			temp = temp.substring(4);// PunePunePune
+		}
+
+		System.out.println(map);
+	}
+
+}
+
+OUTPUT:
+{The=1, Pune=4, greate=1}
+
+==========================================================================================
+
+13. OccuranceOfWordsFromTheString
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class OccuranceOfWordsFromTheString {
+
+	public static void main(String[] args) {
+
+		String str1 = "The Mother";
+		String str2 = "Mother";
+
+		String str3 = str1 + " " + str2;
+
+		String[] str4 = str3.split(" ");
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+
+		for (String word : str4) {
+			map.put(word, map.getOrDefault(word, 0) + 1);
+		}
+		System.out.println(map);
+
+	}
+
+}
+
+OUTPUT:
+{The=1, Mother=2}
+
+==========================================================================================
+
+14. RemoveDuplicateChars
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class RemoveDuplicateChars {
+
+	public static void main(String[] args) {
+
+		String str = "automation";
+		
+		String result = "";
+
+		// If the character is present then it will return the
+		// index position of the character
+		// If not present then it will return -1
+		for (char c : str.toCharArray()) {
+			if (result.indexOf(c) == -1) {
+				result = result + c;
+				
+				// automin
+				// Removed Duplicate chars: automin
+			}
+
+		}
+		System.out.println("Removed Duplicate chars: " + result);
+	}
+
+}
+
+OUTPUT:
+Removed Duplicate chars: automin
+
+==========================================================================================
+
+15. ReverseOnlyChar
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class ReverseOnlyChar {
+
+	public static void main(String[] args) {
+
+		String str = "suraj10gaikwad20";
+
+		char[] ch = str.toCharArray();
+
+		int left = 0;
+		int right = str.length() - 1;
+
+		while (left < right) {
+
+			if (!Character.isLetter(ch[left])) {
+				left++;
+			}
+
+			else if (!Character.isLetter(ch[right])) {
+				right--;
+			}
+
+			else {
+				char temp = ch[left];
+				ch[left] = ch[right];
+				ch[right] = temp;
+
+				left++;
+				right--;
+			}
+		}
+
+		System.out.println(new String(ch));
+	}
+}
+//We use left and right pointers to reverse characters from both ends of the string.
+//1. left = 0 → Points to the first character.
+//2. right = str.length() - 1 → Points to the last character.
+//3. We skip digits and swap letters from both ends.
+//4. After swapping, left++ moves forward and right-- moves backward.
+
+OUTPUT:
+dawki10agjarus20
+
+==========================================================================================
+
+16. ReverseOnlyString
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class ReverseOnlyString {
+
+	public static void main(String[] args) {
+
+		// String str = "suraj123";
+		String str = "123suraj";
+
+		StringBuilder builder = new StringBuilder();
+
+		for (int i = 0; i < str.length(); i++) {
+			if (Character.isDigit(str.charAt(i))) {
+				builder.append(str.charAt(i));
+			}
+		}
+		for (int i = str.length() - 1; i >= 0; i--) {
+			if (Character.isLetter(str.charAt(i))) {
+				builder.append(str.charAt(i));
+			}
+		}
+
+		System.out.println(builder);
+
+	}
+
+}
+
+OUTPUT:
+123jarus
+
+==========================================================================================
+
+17. SecondMostFrequentCharInString
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class SecondMostFrequentCharInString {
+
+	// c appears 4 times → Second highest
+
+	public static void main(String[] args) {
+		
+		String input = "aabbbccccddddd";
+
+		HashMap<Character, Integer> hMap = new HashMap<Character, Integer>();
+
+		for (char inputChar : input.toCharArray()) {
+
+			hMap.put(inputChar, hMap.getOrDefault(inputChar, 0) + 1);
+		}
+
+		System.out.println(hMap);
+
+		// Find the 2nd most frequent character in the String!!
+		int firstMaxFrequency = 0;
+		int secondMaxFrequency = 0;
+
+		for (Map.Entry<Character, Integer> entrySet : hMap.entrySet()) {
+
+			int currentFrequency = entrySet.getValue();
+
+			if (currentFrequency > firstMaxFrequency) {
+
+				secondMaxFrequency = firstMaxFrequency;
+				firstMaxFrequency = currentFrequency;
+
+			} else if (currentFrequency > secondMaxFrequency && (currentFrequency < firstMaxFrequency)) {
+
+				secondMaxFrequency = currentFrequency;
+			}
+		}
+
+		System.out.println(secondMaxFrequency);
+
+		for (Map.Entry<Character, Integer> entrySet : hMap.entrySet()) {
+
+			if (entrySet.getValue() == secondMaxFrequency) {
+
+				System.out.println(entrySet.getKey());
+			}
+		}
+	}
+}
+
+//Find the second highest
+//- d appears 5 times → First highest
+//- c appears 4 times → Second highest
+//- b appears 3 times → Third highest
+//- a appears 2 times → Fourth highest
+
+OUTPUT:
+{a=2, b=3, c=4, d=5}
+4
+c
+
+==========================================================================================
+
+18. SortCharacters
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class SortCharacters {
+
+	public static void main(String[] args) {
+
+		String str = "azbrtckde";
+
+		char[] ch = str.toCharArray();
+
+		for (int i = 0; i < ch.length; i++) {
+
+			for (int j = i + 1; j < ch.length; j++) {
+
+				if (ch[i] > ch[j]) {
+
+					char temp = ch[i];
+					ch[i] = ch[j];
+					ch[j] = temp;
+				}
+			}
+		}
+
+		System.out.println(new String(ch));
+	}
+}
+
+OUTPUT:
+abcdekrtz
+
+==========================================================================================
+
+19. SortWords
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class SortWords {
+
+	public static void main(String[] args) {
+
+		String str = "Java Selenium Playwright API Automation";
+
+		String[] words = str.split(" ");
+
+		for (int i = 0; i < words.length; i++) {
+
+			for (int j = i + 1; j < words.length; j++) {
+
+				if (words[i].compareTo(words[j]) > 0) {
+
+					String temp = words[i];
+					words[i] = words[j];
+					words[j] = temp;
+				}
+			}
+		}
+
+		System.out.println(String.join(" ", words));
+	}
+}
+
+//Interview explanation (4 lines)
+//1. First, I split the string into words using split(" ").
+//2. I use two nested loops to compare the words.
+//3. I use compareTo() for alphabetical sorting or length() for length-based sorting.
+//4. If the condition is true, I swap the words and print the sorted result.
+
+OUTPUT:
+API Automation Java Playwright Selenium
+
+==========================================================================================
+
+20. SubString
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class SubString {
+
+	public static void main(String[] args) {
+
+		String str = "punepunepune";
+		int count = 1;
+
+		while (str.startsWith("pune")) {
+			System.out.println("pune :" + count++);
+
+			str = str.substring(4);
+
+		}
+	}
+
+}
+
+OUTPUT:
+pune :1
+pune :2
+pune :3
+
+==========================================================================================
+
+21. SumNumberFromTheString1
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class SumNumberFromTheString1 {
+
+	public static void main(String[] args) {
+
+		String str = "su1ra2j3";
+		int sum = 0;
+
+		for (int i = 0; i < str.length(); i++) {
+
+			if (Character.isDigit(str.charAt(i))) {
+
+				sum = sum + (str.charAt(i) - '0');
+			}
+		}
+
+		System.out.println("Sum of digits: " + sum);
+	}
+}
+
+OUTPUT:
+Sum of digits: 6
+
+==========================================================================================
+
+22. SumNumberFromTheString2
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class SumNumberFromTheString2 {
+	public static void main(String[] args) {
+
+		String str = "su10ra20j30";
+
+		int sum = 0;
+		int num = 0;
+
+		for (int i = 0; i < str.length(); i++) {
+
+			if (Character.isDigit(str.charAt(i))) {
+				num = num * 10 + (str.charAt(i) - '0');
+			} else {
+				sum = sum + num;
+				num = 0;
+			}
+		}
+
+		sum = sum + num;
+
+		System.out.println("Sum: " + sum);
+	}
+}
+
+OUTPUT:
+Sum: 60
+
+==========================================================================================
+
+23. SwappingStringWithoutThirdVariable
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+public class SwappingStringWithoutThirdVariable {
+
+	public static void main(String[] args) {
+
+		String s1 = "Taterao";
+		String s2 = "Ram";
+
+		// TateraoRam
+
+		s1 = s1 + s2;
+
+		s2 = s1.substring(0, s1.length() - s2.length());
+
+		System.out.println(s1.substring(0, 7));
+
+		s1 = s1.substring(s2.length());
+
+//		System.out.println(s1);
+//		System.out.println(s2);
+	}
+
+}
+
+OUTPUT:
+Taterao
+
+==========================================================================================
+
+24. WordReversal
+------------------------------------------------------------------------------------------
+JAVA PROGRAM:
+package October_2026_Programms;
+
+import java.util.Arrays;
+
+public class WordReversal {
+
+	public static void main(String[] args) {
+
+		String input = "Java Test";
+		StringBuilder finalResult = new StringBuilder();
+
+		String data[] = input.split(" ");
+		System.out.println(Arrays.toString(data));
+
+		for (String word : data) {
+
+			char charArray[] = word.toCharArray();
+
+			int left = 0;
+			int right = charArray.length - 1;
+
+			while (left < right) {
+
+				char temp = charArray[left];
+				charArray[left] = charArray[right];
+				charArray[right] = temp;
+
+				left++;
+				right--;
+			}
+
+			String result = new String(charArray);
+
+			finalResult.append(result).append(" ");
+		}
+
+		System.out.println(finalResult);
+	}
+}
+
+OUTPUT:
+[Java, Test]
+avaJ tseT 
+
+==========================================================================================

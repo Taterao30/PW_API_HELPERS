@@ -1,0 +1,70 @@
+Incremental/Decremental Operators:        
+
+1) What will be the output of the following program?
+		let i = 11;
+		
+		i = i++ + ++i;
+		
+		console.log(i);
+
+2) Guess the output of the following program?
+		let a=11, b=22, c;		
+		c = a + b + a++ + b++ + ++a + ++b;
+		console.log("a="+a);
+		console.log("b="+b);
+		console.log("c="+c);
+
+3) What will be the output of the below program?
+let i=0;
+lt j = i++ - --i + ++i - i--;
+console.log(i);
+console.log(j);
+
+
+4) Is the below program written correctly?
+let b = true;
+b++;
+console.log(b);
+
+5) What will be the output of the below program?
+ let i=1, j=2, k=3;
+let m = i-- - j-- - k--;
+console.log("i="+i);
+console.log("j="+j);
+console.log("k="+k);
+console.log("m="+m);
+
+6) What will be the output of the following program?
+let a=1, b=2; 
+console.log(--b - ++a + ++b - --a);
+
+7) What will be the value of i, j and k in the below program?
+let i=19, j=29, k=9;
+let m = i-- - j-- - k--;
+console.log("i="+i);
+console.log("j="+j);
+console.log("k="+k);
+
+8) What is wrong with the below program? Why it is showing a compilation error?
+let i = 11;
+let j = --(i++);        
+
+9) Guess the value of p in the below program?
+let m = 0, n = 0;
+let p = --m * --n * n-- * m--;
+console.log(p);
+
+10) What will be the output of the following program?
+let a=1;
+a = a++ + ++a * --a - a--; 
+console.log(a);
+
+11) What will be the outcome of the below program?
+let a = 11++;
+console.log(a);
+
+12) What will be the outcome of the below program?
+
+let d = 1.5, D = 2.5;
+console.log(d++ + ++D);
+

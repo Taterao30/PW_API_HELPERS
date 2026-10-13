@@ -1,0 +1,168 @@
+REST ASSURED API TESTING - HTTP STATUS CODES INTERVIEW NOTES
+===========================================================
+Status Codes: 405, 409, 415, 422, 429, 500, 503
+Language: Java | Tool: REST Assured
+
+IMPORTANT:
+The code examples use sample endpoints (api.example.com).
+The actual response depends on the API implementation and contract.
+.statusCode(...) checks a received status; it does not create that response.
+
+-----------------------------------------------------------
+1. HTTP 405 - METHOD NOT ALLOWED
+-----------------------------------------------------------
+Meaning: The endpoint does not support the HTTP method used.
+Example: Sending DELETE to a resource that supports only GET.
+
+Java REST Assured:
+
+given()
+    .baseUri("https://api.example.com")
+.when()
+    .delete("/users/101")
+.then()
+    .statusCode(405);
+
+Interview answer:
+We receive 405 when an HTTP method is not allowed for the resource.
+
+-----------------------------------------------------------
+2. HTTP 409 - CONFLICT
+-----------------------------------------------------------
+Meaning: Request conflicts with the current state of a resource.
+Example: Registering a user with an email that already exists.
+
+Java REST Assured:
+
+given()
+    .baseUri("https://api.example.com")
+    .contentType("application/json")
+    .body("{\"name\":\"Suraj\",\"email\":\"existing@gmail.com\"}")
+.when()
+    .post("/register")
+.then()
+    .statusCode(409);
+
+Interview answer:
+We receive 409 when the request conflicts with existing resource data or state.
+
+-----------------------------------------------------------
+3. HTTP 415 - UNSUPPORTED MEDIA TYPE
+-----------------------------------------------------------
+Meaning: Server does not accept the request body format.
+Example: Sending XML when an endpoint accepts only JSON.
+
+Java REST Assured:
+
+given()
+    .baseUri("https://api.example.com")
+    .contentType("application/xml")
+    .body("<name>Suraj</name>")
+.when()
+    .post("/users")
+.then()
+    .statusCode(415);
+
+Interview answer:
+We receive 415 when the request Content-Type is unsupported.
+
+-----------------------------------------------------------
+4. HTTP 422 - UNPROCESSABLE CONTENT
+-----------------------------------------------------------
+Meaning: Server understands the content, but cannot process its data.
+Example: Sending a negative age when a valid age is required.
+
+Java REST Assured:
+
+given()
+    .baseUri("https://api.example.com")
+    .contentType("application/json")
+    .body("{\"name\":\"Suraj\",\"age\":-10}")
+.when()
+    .post("/users")
+.then()
+    .statusCode(422);
+
+Interview answer:
+We receive 422 when syntactically valid content fails semantic or business validation.
+
+-----------------------------------------------------------
+5. HTTP 429 - TOO MANY REQUESTS
+-----------------------------------------------------------
+Meaning: Client has exceeded an API rate limit.
+Example: Sending 100 requests when only 10 per minute are allowed.
+
+Java REST Assured (after triggering the API's test rate limit):
+
+given()
+    .baseUri("https://api.example.com")
+.when()
+    .get("/users")
+.then()
+    .statusCode(429);
+
+Interview answer:
+We receive 429 when the client sends too many requests within a given period.
+Tip: If present, inspect the Retry-After response header.
+
+-----------------------------------------------------------
+6. HTTP 500 - INTERNAL SERVER ERROR
+-----------------------------------------------------------
+Meaning: An unexpected server-side error occurred.
+Example: Unhandled exception in a backend service.
+
+Java REST Assured (when the test environment reproduces the error):
+
+given()
+    .baseUri("https://api.example.com")
+.when()
+    .get("/orders/101")
+.then()
+    .statusCode(500);
+
+Interview answer:
+We receive 500 when the server encounters an unexpected error.
+
+-----------------------------------------------------------
+7. HTTP 503 - SERVICE UNAVAILABLE
+-----------------------------------------------------------
+Meaning: The service temporarily cannot handle the request.
+Example: Server maintenance or overload.
+
+Java REST Assured (when the test environment simulates downtime):
+
+given()
+    .baseUri("https://api.example.com")
+.when()
+    .get("/payments")
+.then()
+    .statusCode(503);
+
+Interview answer:
+We receive 503 when a service is temporarily unavailable.
+Tip: If present, inspect the Retry-After response header.
+
+===========================================================
+IMPORTANT INTERVIEW DIFFERENCES
+===========================================================
+400 vs 422: 400 = general bad request; 422 = understood content
+            that fails semantic validation.
+405 vs 415: 405 = wrong HTTP method; 415 = unsupported content type.
+409 vs 422: 409 = resource-state conflict; 422 = semantic validation failure.
+429 vs 503: 429 = rate limit exceeded; 503 = service temporarily unavailable.
+500 vs 503: 500 = unexpected server error; 503 = temporary unavailability.
+
+QUICK REVISION
+405 -> Wrong HTTP method
+409 -> Resource conflict
+415 -> Wrong content type
+422 -> Invalid business data
+429 -> Too many API requests
+500 -> Unexpected server error
+503 -> Service temporarily unavailable
+
+REAL-TIME QA TIP:
+For 409, first create a user with an email, then register with the same
+email again. Assert 409 only if the API contract specifies 409.
+For 429, 500, and 503, use controlled test environments or mocks;
+do not overload or disrupt production services.
